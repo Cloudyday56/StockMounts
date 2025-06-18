@@ -1,0 +1,3 @@
+# MernExplore
+Explore the MERN stack development.
+Following the FreeCodeCamp tutorial...
