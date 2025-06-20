@@ -1,8 +1,10 @@
 import Note from '../models/Note.js';
 
-export async function getAllNotes (req, res)  {
+export async function getAllNotes (_, res)  { 
+    //the above underscore (_) is used to indicate that the first parameter (req) is not used in this function
     try {
-        const notes = await Note.find().sort({ createdAt: -1 }); //get every notes, with newest first
+        const notes = await Note.find().sort({ createdAt: -1 }); 
+        //get every notes, -1 sorts in desc. order with newest first
         res.status(200).json(notes);
     } catch (error) {
         console.error("Error in getAllNotes:", error);
