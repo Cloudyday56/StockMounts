@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast';
 
 
 const HomePage = () => {
-  const [isRateLimited, setIsRateLimited] = useState(true);
+  const [isRateLimited, setIsRateLimited] = useState(false);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,6 +22,7 @@ const HomePage = () => {
         setIsRateLimited(false);
       } catch (error) {
         console.log('Error fetching notes:', error);
+        console.log('Error response:', error.response);
         if (error.response?.status === 429) {
           // If the error is a rate limit error, set the rate limit state
           setIsRateLimited(true);
@@ -45,6 +46,7 @@ const HomePage = () => {
       <div className='max-w-7xl mx-auto p-4 mt-6'>
         {loading && <div className="text-center text-primary py-10">Loading notes...</div>}
         
+        {/* if not rate limited, show the notes */}
         {notes.length > 0 && !isRateLimited && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {notes.map(note => (
