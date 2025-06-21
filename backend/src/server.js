@@ -1,8 +1,11 @@
 import express from "express";
+import dotenv from "dotenv";
+import cors from "cors"; // Import CORS middleware for handling cross-origin requests
+
 import notesRoutes from "./routes/notesRoutes.js";
 import { connectDB } from "./config/db.js";
-import dotenv from "dotenv";
 import rateLimiter from "./middleware/rateLimiter.js";
+
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -18,8 +21,13 @@ connectDB().then(() => {
 });
 
 //middleware
-app.use(express.json()); //before routes to parse JSON bodies (so that req.body ({title, content}) is available in the routes)
+app.use(
+    cors({
+        origin:"http://localhost:5173", // Allow requests from this origin (frontend)
+    })
+); // Enable CORS for all routes (Cross-Origin Resource Sharing)
 
+app.use(express.json()); //before routes to parse JSON bodies (so that req.body ({title, content}) is available in the routes)
 app.use(rateLimiter); // Middleware to limit the rate of requests
 
 // app.use((req, res, next) => {
