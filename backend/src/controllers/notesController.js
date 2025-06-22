@@ -49,7 +49,6 @@ export async function updateNote (req, res) {
             { title, content },
             { new: true }
         );
-        res.status(200).json({ message: "Note updated successfully" });
         if (!updatedNote) {
             return res.status(404).json({ message: "Note not found" });
         }
