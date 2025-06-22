@@ -12,6 +12,14 @@ export default {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ["luxury", "forest"]
+    themes: [
+      {luxury : {
+          ...require("daisyui/src/theming/themes")["luxury"],
+          primary: "#F3A326",
+          // secondary: "#F3A326",
+          // accent: "#F3A326",
+          // neutral: "#F3A326",
+        },}
+      ]
   }
 }
