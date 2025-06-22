@@ -6,6 +6,8 @@ import NoteCard from '../components/NoteCard';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
+import api from '../lib/axios'; // Import the axios instance
+
 
 
 const HomePage = () => {
@@ -16,7 +18,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/notes'); //Backend API endpoint
+        const response = await api.get('/notes'); //Backend API endpoint
         console.log(response.data);
         setNotes(response.data);
         setIsRateLimited(false);
