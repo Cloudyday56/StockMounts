@@ -74,7 +74,7 @@ const CreatePage = () => {
                   {/* title input */}
                   <input
                     type="text"
-                    placeholder="Note Title"
+                    placeholder="Note title"
                     className="input input-bordered"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
