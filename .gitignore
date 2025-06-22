@@ -1,2 +1,3 @@
-frontend/README.md
-backend/node_modules
+README.md
+node_modules
+.env
