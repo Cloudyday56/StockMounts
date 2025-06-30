@@ -1,17 +1,26 @@
 # MernExplore
-#### About
-- Explore the MERN stack development based on the FreeCodeCamp tutorial
-- A simple web application built using the MERN stack: **MongoDB**, **Express**, **React**, and **Node.js**.
-- This project consists on developing a full-stack website with a RESTful API backend.
+A simple notes application built with the MERN stack. You can create, view, and manage your notes.
 
-#### Features
+## What it does
 
-- Backend built with Node.js and Express.js
-- MongoDB for data storage
-- REST API for client-server communication
-- Frontend built with React
+- Create new notes with title and content
+- View all your notes
+- Click on any note to see details
+- Rate limiting to prevent spam
 
-#### Prerequisites
+## Technologies used
 
-- Node.js and npm installed
-- MongoDB installed and running
+**Frontend:**
+
+- React with Vite
+- Tailwind CSS + DaisyUI
+- React Router
+- Axios
+
+**Backend:**
+
+- Node.js + Express
+- MongoDB with Mongoose
+- Upstash Redis (rate limiting)
+
+Made based on the FreeCodeCamp MERN stack tutorial.
