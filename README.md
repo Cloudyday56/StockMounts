@@ -1,4 +1,4 @@
-# MernExplore
+# NoteStorm
 A simple notes application built with the MERN stack. You can create, view, and manage your notes.
 
 ## What it does
