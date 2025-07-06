@@ -23,4 +23,5 @@ A simple notes application built with the MERN stack. You can create, view, and 
 - MongoDB with Mongoose
 - Upstash Redis (rate limiting)
 
-Made based on the FreeCodeCamp MERN stack tutorial.
+## Acknowledgments
+This project is made based on [Codesistency](https://www.youtube.com/@codesistency)'s [tutorial](https://youtu.be/Ea9rrRj9e0Y?si=mX89W3K_jmX1QWDx)
