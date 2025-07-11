@@ -1,4 +1,37 @@
-node_modules
+# Node.js dependencies
+node_modules/
+
+# Python virtual environment and cache
+MLservice/.venv/
+MLservice/venv/
+MLservice/env/
+MLservice/__pycache__/
+MLservice/model/__pycache__/
+*.pyc
+
+# Build output folders
+build/
+dist/
+
+# Environment variables
 .env
-DS_Store
+.env.*
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE & Editor Folders
+.vscode/
+.idea/
+
+# Operating System generated files
 .DS_Store
+DS_Store
+Thumbs.db
+
+# ML Models & Data (optional)
+# Uncomment the lines below if your models or data files are too large for Git
+# MLservice/trained_models/
+# MLservice/data/
