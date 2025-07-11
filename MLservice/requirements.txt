@@ -1,0 +1,48 @@
+# Core
+pandas==2.1.4 # Data manipulation and analysis
+yfinance==0.2.65 # Financial data
+
+# Forecasting
+# prophet  # use latest version, install separately if needed
+
+# Streamlit frontend (web framework)
+streamlit==1.29.0
+
+# Visualization
+plotly==5.17.0
+matplotlib==3.8.2
+
+# Machine learning algorithms
+scikit-learn==1.4.2
+joblib==1.5.1 # For saving and loading models
+# tensorflow==2.15.0
+# OR use pytorch instead: torch==2.1.2
+
+# # Web API
+# flask==2.3.3
+# flask-cors==4.0.0
+# # Or use FastAPI instead:
+# # fastapi==0.104.1
+# # uvicorn==0.24.0
+
+# # Production server
+# gunicorn==21.2.0
+
+# # Visualization (if needed in the backend)
+# plotly==5.17.0
+# matplotlib==3.8.2
+
+# # Utilities
+# requests==2.31.0
+# simplejson==3.19.2
+# python-dotenv==1.0.0
+
+# Data processing
+# ta==0.10.2  # Technical analysis indicators
+
+# Development tools
+# pytest==7.4.3 #automated testing
+
+# Environment and config
+# python-dotenv==1.0.0 #API keys management
+
