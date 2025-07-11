@@ -4,12 +4,13 @@ import cors from "cors"; // Import CORS middleware for handling cross-origin req
 import path from "path"; // Import path module for handling file paths
 
 import notesRoutes from "./routes/notesRoutes.js";
+import predictionRoutes from "./routes/predictionRoutes.js";
+
 import { connectDB } from "./config/db.js";
 import rateLimiter from "./middleware/rateLimiter.js";
 
 
 dotenv.config(); // Load environment variables from .env file
-
 
 // const express = require("express");
 const app = express();
@@ -29,13 +30,8 @@ if (process.env.NODE_ENV !== "production") { // Enable CORS only in development 
 app.use(express.json()); //before routes to parse JSON bodies (so that req.body ({title, content}) is available in the routes)
 app.use(rateLimiter); // Middleware to limit the rate of requests
 
-// app.use((req, res, next) => {
-//     console.log(`Request Method: ${req.method} & Request URL: ${req.url}`); // Log the request method and URL
-//     next(); // Call the next middleware or route handler
-// });
-
 app.use("/api/notes", notesRoutes); // Middleware to parse JSON bodies
-// app.use("/api/products", productRoutes);
+app.use("/api/predict", predictionRoutes); // Middleware for prediction routes
 // app.use("/api/whatever", whateverRoutes);
 
 if (process.env.NODE_ENV === "production") { //deploy only under production
