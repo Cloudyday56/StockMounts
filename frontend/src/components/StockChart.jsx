@@ -48,17 +48,21 @@ const StockChart = ({ chartData, ticker }) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
-      legend: { //legend
+      legend: {
         position: 'top',
         labels: {
             color: '#a6adbb'
         }
       },
-      title: { //title
+      title: {
         display: true,
         text: `${ticker} Price History (1 Year)`,
-        color: '#a6adbb'
+        color: '#a6adbb',
+        font: {
+            size: 20 // Enlarge the title font size
+        }
       },
     },
     scales: {
