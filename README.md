@@ -1,27 +1,39 @@
-# NoteStorm
-A simple notes application built with the MERN stack. You can create, view, and manage your notes.
+# StockMounts
 
-## What it does
+A full-stack application for recording, viewing, and managing trading notes, with integrated stock price prediction using machine learning.
 
-- Create new notes with title and content
-- View all your notes
-- Click on any note to see details
-- Rate limiting to prevent spam
+## Features
 
-## Technologies used
+- Stock price prediction using ML models (Python service)
+- Create, view, update, and delete notes with title and content
+- Rate limiting to prevent spam (Upstash Redis)
+- Modern UI with Tailwind CSS and DaisyUI
+- Toast notifications for user feedback
+
+## Technologies Used
 
 **Frontend:**
 
-- React with Vite
-- Tailwind CSS + DaisyUI
-- React Router
+- React (with Vite)
+- React Router v7
 - Axios
+- Tailwind CSS + DaisyUI
+- Chart.js (for visualizations)
+- Lucide React Icons
+- React Hot Toast
 
 **Backend:**
 
 - Node.js + Express
 - MongoDB with Mongoose
 - Upstash Redis (rate limiting)
+- CORS, dotenv
+
+**Machine Learning Service:**
+
+- Python (Flask or FastAPI)
+- scikit-learn, joblib
+- Custom-trained models per stock symbol
 
 ## Acknowledgments
-This project is made based on [Codesistency](https://www.youtube.com/@codesistency)'s [tutorial](https://youtu.be/Ea9rrRj9e0Y?si=mX89W3K_jmX1QWDx)
+This proejct's full stack skeleton is based on [Codesistency](https://www.youtube.com/@codesistency)'s [tutorial](https://youtu.be/Ea9rrRj9e0Y?si=mX89W3K_jmX1QWDx)
