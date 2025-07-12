@@ -87,6 +87,23 @@ def prepare_ml_data(symbol, period="1y"):
     
     return featured_data
 
+def add_technical_indicators(df):
+    """
+    Adds technical indicators to the dataframe. (graphing)
+    Currently adds a 50-day Simple Moving Average (SMA).
+    """
+    # Ensure the index is a DatetimeIndex for rolling calculations
+    if not isinstance(df.index, pd.DatetimeIndex):
+        df.index = pd.to_datetime(df.index)
+        
+    df['SMA_50'] = df['Close'].rolling(window=50).mean()
+    
+    # Can add other indicators here in the future
+    # df['SMA_200'] = df['Close'].rolling(window=200).mean()
+    # df['RSI'] = ...
+    
+    return df
+
 # Testing
 if __name__ == "__main__":
     # Create features for Apple

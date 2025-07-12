@@ -1,15 +1,14 @@
-import React from 'react'
-import Navbar from '../components/Navbar/';
-import RateLimitedUI from '../components/RateLimitedUI';
-import NoteCard from '../components/NoteCard';
-import NotesNotFound from '../components/NotesNotFound';
-import StockPredictor from '../components/StockPredictor';
+import React from "react";
+import Navbar from "../components/Navbar/";
+import RateLimitedUI from "../components/RateLimitedUI";
+import NoteCard from "../components/NoteCard";
+import NotesNotFound from "../components/NotesNotFound";
+import StockPredictor from "../components/StockPredictor";
 
-import { useEffect, useState } from 'react';
-import { toast } from 'react-hot-toast';
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
-import api from '../lib/axios'; // Import the axios instance
-
+import api from "../lib/axios"; // Import the axios instance
 
 const HomePage = () => {
   const [isRateLimited, setIsRateLimited] = useState(false);
@@ -19,68 +18,69 @@ const HomePage = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await api.get('/notes'); //Backend API endpoint
+        const response = await api.get("/notes"); //Backend API endpoint
         console.log(response.data);
         setNotes(response.data);
         setIsRateLimited(false);
       } catch (error) {
-        console.log('Error fetching notes:', error);
-        console.log('Error response:', error.response);
+        console.log("Error fetching notes:", error);
+        console.log("Error response:", error.response);
         if (error.response?.status === 429) {
           // If the error is a rate limit error, set the rate limit state
           setIsRateLimited(true);
         } else {
           // Handle other errors
-          toast.error('Error loading notes');
+          toast.error("Error loading notes");
         }
       } finally {
-          setLoading(false);
+        setLoading(false);
       }
-    }
+    };
     fetchNotes();
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-base-100">
       <Navbar />
 
       {isRateLimited && <RateLimitedUI />}
 
-      <div className="container mx-auto px-4 py-12 text-white">
+      <div className="container mx-auto px-4 py-12 text-base-content">
         <header className="text-center mb-10">
-          <h1 className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-orange-500">
+          <h1 className="text-5xl font-bold mb-2 text-primary">
             Stock Predictor
           </h1>
-          <p className="text-lg text-gray-300">
+          <p className="text-lg text-base-content/70">
             Leveraging Machine Learning to Forecast Stock Market Trends
           </p>
         </header>
 
         <main className="flex justify-center">
           {/* We are placing the StockPredictor component right in the middle of the homepage */}
-          <div className="w-full max-w-md p-8 bg-gray-800 bg-opacity-50 rounded-xl shadow-2xl">
+          <div className="w-full max-w-md p-8 bg-base-200 rounded-xl shadow-2xl">
             <StockPredictor />
           </div>
         </main>
       </div>
 
-      <div className='max-w-7xl mx-auto p-4 mt-6'>
-        {loading && <div className="text-center text-primary py-10">Loading notes...</div>}
-        
+      <div className="max-w-7xl mx-auto p-4 mt-6">
+        {loading && (
+          <div className="text-center text-primary py-10">Loading notes...</div>
+        )}
+
         {!loading && notes.length === 0 && !isRateLimited && <NotesNotFound />}
 
         {/* if not rate limited, show the notes */}
         {notes.length > 0 && !isRateLimited && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {notes.map(note => (
-              <NoteCard key={note._id} note={note} setNotes={setNotes}/> //setNotes is used to update the notes state after deleting a note
-
+            {notes.map((note) => (
+              <NoteCard key={note._id} note={note} setNotes={setNotes} /> //setNotes is used to update the notes state after deleting a note
             ))}
           </div>
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
