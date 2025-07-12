@@ -189,7 +189,7 @@ class StockPredictor:
           raise ValueError("No model to save. Train the model first.")
       print(f"\n💾 Saving model to {filepath}...")
       os.makedirs(os.path.dirname(filepath), exist_ok=True)
-      
+
       # Save both the model and feature columns
       model_data = {
           'model': self.model,
@@ -214,7 +214,6 @@ class StockPredictor:
         else:
             # For backward compatibility with old saved models
             self.model = model_data
-            # We'll need to infer feature columns later
         
         print("Model loaded successfully.")
 

@@ -10,10 +10,10 @@ const NotesNotFound = () => {
       </div>
       <h3 className="text-2xl font-bold">No notes yet</h3>
       <p className="text-base-content/70">
-        Ready to organize your thoughts? Create your first note to get started on your journey.
+        Ready to record your trades? Create your first note to keep your financical insights organized.
       </p>
       <Link to="/create" className="btn btn-primary">
-        Create Your First Note
+        Create Note
       </Link>
     </div>
   );

@@ -1,22 +1,52 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from model.predictor import StockPredictor
+from utils.fetch_data import fetch_stock_data
+from utils.feature_engineering import add_technical_indicators
 import numpy as np
 
-#* Create an instance of the FastAPI class
+# FastAPI app instance
 app = FastAPI(
     title="Stock Prediction API",
     description="API to predict stock prices using a trained ML model.",
     version="1.0.0"
 )
 
-# This will hold our loaded model instance
-predictor = None
+# --- CORS Middleware ---
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "http://localhost:5001", # Default Vite dev port for frontend
+    "http://localhost:5000",
+]
 
-def convert_numpy_types(obj): #* important: This helper function is used to convert numpy types to native Python types
-    """
-    Recursively converts numpy number types in an object to native Python types.
-    """
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+EXPERT_STOCKS = ["AAPL", "GOOG", "MSFT", "TSLA", "AMZN", "NFLX", "META", "NVDA", "AMD", "INTC", "BABA", "SPY"]
+models = {}
+
+@app.on_event("startup") #run only once to load all models
+def load_all_models():
+    """Load all expert models into a dictionary."""
+    global models #accessible anywhere
+    for stock in EXPERT_STOCKS:
+        model_path = Path(f"trained_models/model_{stock}.joblib")
+        if model_path.exists():
+            predictor = StockPredictor()
+            predictor.load_model(model_path)
+            models[stock] = predictor
+        else:
+            print(f"Warning: Model file not found for {stock} at {model_path}.")
+
+# Helper function to convert numpy types to native Python types
+def convert_numpy_types(obj):
     if isinstance(obj, dict):
         return {k: convert_numpy_types(v) for k, v in obj.items()}
     elif isinstance(obj, list):
@@ -30,50 +60,50 @@ def convert_numpy_types(obj): #* important: This helper function is used to conv
     else:
         return obj
 
-@app.on_event("startup")
-def load_model():
-    """
-    This function runs once when the API server starts.
-    It loads the ML model into memory.
-    """
-    global predictor
-    model_path = Path(__file__).parent / "trained_models" / "model_AAPL.joblib" # Adjust the path as needed
-    
-    if not model_path.exists():
-        print(f"Warning: Model file not found at {model_path}. The /predict endpoint will not work.")
-        return
-
-    print(f"Loading model from {model_path}...")
-    predictor = StockPredictor()
-    predictor.load_model(model_path)
-    print("Model loaded successfully.")
-
-
-@app.get("/") #* This is the root endpoint (FastAPI tool)
+@app.get("/")
 def read_root():
-    return {"message": "ML Service is running. Go to /docs for API documentation."}
+    return {"message": "ML Service is running"}
 
-@app.get("/predict/{ticker}") #* This is the prediction endpoint
+
+@app.get("/predict/{ticker}")
 def get_prediction(ticker: str, period: str = "1y"):
-    """
-    Predicts the next day's stock price for a given ticker.
-    """
-    if predictor is None:
-        raise HTTPException(status_code=503, detail="Model is not available. Check server logs for errors.")
     
-    try:
-        
-        # 1. The model's predictor returns a Python dictionary
-        prediction_data = predictor.predict_tomorrow(ticker, period)
+    
+    predictor = models.get(ticker.upper(), models.get("SPY")) # Default to SPY if ticker not found
 
-        # 2. This function cleans it up, but it's still a Python dictionary
-        # Sanitize the dictionary to convert any numpy types to native Python types
-        sanitized_data = convert_numpy_types(prediction_data)
+    try:
+        # Get the prediction
+        prediction_data = predictor.predict_tomorrow(ticker, period)
+        
+        # Fetch historical data for the chart
+        hist_data = fetch_stock_data(ticker, period='1y')
+        hist_data = add_technical_indicators(hist_data) # Calculate SMA
+        
+        hist_data = hist_data.fillna(value=np.nan).replace([np.nan], [None])
+
+        # Format data for Chart.js
+        chart_data = {
+            "labels": hist_data.index.strftime('%Y-%m-%d').tolist(),
+            "prices": hist_data['Close'].tolist(),
+            "sma": hist_data['SMA_50'].tolist()
+        }
+
+        # Combine all data into one response
+        response_data = {
+            **prediction_data,
+            "chartData": chart_data
+        }
+        
+        sanitized_data = convert_numpy_types(response_data)
 
         if 'ticker' not in sanitized_data:
             sanitized_data['ticker'] = ticker
-
-        # 3. FastAPI automatically converts this Python dictionary into a JSON response. (actually its just a python dictionary)
+            
         return sanitized_data
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred during prediction: {str(e)}")
+    
+
+
+
+

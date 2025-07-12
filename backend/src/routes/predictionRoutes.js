@@ -11,7 +11,7 @@ const ML_API_URL = 'http://127.0.0.1:8000';
  * @description    Get a stock prediction from the Python ML service
  * @access  Public (no authentication required)
  */
-router.get('/:ticker', async (req, res) => {
+router.get('/:ticker', async (req, res) => { // run when gotten a request to /api/predict/:ticker
   try {
     const ticker = req.params.ticker;
 
