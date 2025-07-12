@@ -16,11 +16,9 @@ A full-stack application for recording, viewing, and managing trading notes, wit
 **Frontend:**
 
 - React (with Vite)
-- React Router v7
-- Axios
 - Tailwind CSS + DaisyUI
 - Chart.js (for visualizations)
-- Lucide React Icons
+- Lucide React
 - React Hot Toast
 
 **Backend:**
@@ -32,7 +30,8 @@ A full-stack application for recording, viewing, and managing trading notes, wit
 
 **Machine Learning Service:**
 
-- Python (Flask or FastAPI)
+- Python
+- FastAPI
 - scikit-learn, joblib
 - Custom-trained models per stock symbol
 
