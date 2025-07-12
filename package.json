@@ -1,7 +1,7 @@
 {
-  "name": "mernexplore",
+  "name": "stockmounts",
   "version": "1.0.0",
-  "description": "Explore the MERN stack development. Following the FreeCodeCamp tutorial...",
+  "description": "combining fullstack development with machine learning",
   "main": "index.js",
   "scripts": {
     "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
