@@ -1,29 +1,28 @@
-import { useState, useEffect } from 'react';
-import api from '../lib/axios';
-import StockChart from './StockChart';
+import { useState, useEffect } from "react";
+import api from "../lib/axios";
+import StockChart from "./StockChart";
+import { toast } from "react-hot-toast";
 
 const StockPredictor = () => {
-  const [ticker, setTicker] = useState('SPY');
+  const [ticker, setTicker] = useState("SPY");
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [isGridVisible, setIsGridVisible] = useState(false); // State for grid visibility
 
   const fetchPrediction = async (tickerSymbol) => {
     if (!tickerSymbol) {
-      setError('Please enter a stock ticker.');
+      toast.error("Please enter a stock ticker.");
       return;
     }
     setLoading(true);
-    setError('');
-    // setPrediction(null); 
+    // setPrediction(null);
 
     try {
       const response = await api.get(`/predict/${tickerSymbol.toUpperCase()}`);
       setPrediction(response.data);
     } catch (err) {
-      const message = err.response?.data?.message || 'An error occurred.';
-      setError(message);
-      console.error(err);
+      console.error("Error fetching prediction:", err);
+      toast.error("Please enter a valid stock ticker.");
     } finally {
       setLoading(false);
     }
@@ -36,13 +35,15 @@ const StockPredictor = () => {
 
   // Fetch SPY data when the component first loads
   useEffect(() => {
-    fetchPrediction('SPY');
+    fetchPrediction("SPY");
   }, []);
-
 
   return (
     <div>
-      <form onSubmit={handlePredict} className="flex flex-col sm:flex-row gap-3">
+      <form
+        onSubmit={handlePredict}
+        className="flex flex-col sm:flex-row gap-3"
+      >
         <input
           type="text"
           value={ticker}
@@ -51,11 +52,9 @@ const StockPredictor = () => {
           className="input input-bordered w-full"
         />
         <button type="submit" className="btn btn-primary" disabled={loading}>
-          {loading && !prediction ? 'Predicting...' : 'Predict'}
+          {loading && !prediction ? "Predicting..." : "Predict"}
         </button>
       </form>
-
-      {error && <p className="mt-4 text-center text-error">{error}</p>}
 
       {/* Show a loading skeleton or the prediction */}
       {loading && !prediction && (
@@ -73,20 +72,38 @@ const StockPredictor = () => {
           <div className="stats stats-vertical lg:stats-horizontal shadow bg-base-300 w-full text-center">
             <div className="stat">
               <div className="stat-title text-info">Current Price</div>
-              <div className="stat-value text-primary text-2xl md:text-3xl">${prediction.current_price.toFixed(2)}</div>
+              <div className="stat-value text-primary text-2xl md:text-3xl">
+                ${prediction.current_price.toFixed(2)}
+              </div>
             </div>
             <div className="stat">
-              <div className="stat-title text-info">Tomorrow</div>
-              <div className="stat-value text-primary text-2xl md:text-3xl">{prediction.direction}</div>
+              <div className="stat-title text-info">Next Trading Day</div>
+              <div className="stat-value text-primary text-2xl md:text-3xl">
+                {prediction.direction}
+              </div>
             </div>
             <div className="stat">
               <div className="stat-title text-info">Confidence</div>
-              <div className="stat-value text-primary text-2xl md:text-3xl">{prediction.confidence.toFixed(2)}%</div>
+              <div className="stat-value text-primary text-2xl md:text-3xl">
+                {prediction.confidence.toFixed(2)}%
+              </div>
             </div>
           </div>
-          
-          <div className="mt-8 h-[500px]">
-            <StockChart chartData={prediction.chartData} ticker={prediction.ticker} />
+
+          <div className="relative mt-8 h-[500px]">
+            <button
+              onClick={() => setIsGridVisible(!isGridVisible)} //toggle grid visibility
+              className="btn btn-secondary btn-sm absolute top-0 right-2 z-10"
+              title="Toggle Grid Lines"
+            >
+              {isGridVisible ? "Hide Grid" : "Show Grid"}
+            </button>
+
+            <StockChart
+              chartData={prediction.chartData}
+              ticker={prediction.ticker}
+              isGridVisible={isGridVisible}
+            />
           </div>
         </div>
       )}

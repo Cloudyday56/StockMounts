@@ -21,7 +21,7 @@ ChartJS.register(
   Legend
 );
 
-const StockChart = ({ chartData, ticker }) => {
+const StockChart = ({ chartData, ticker, isGridVisible }) => {
   const data = {
     labels: chartData.labels,
     datasets: [
@@ -67,11 +67,18 @@ const StockChart = ({ chartData, ticker }) => {
     },
     scales: {
         x: {
-            ticks: { color: '#a6adbb' }
+          ticks: { color: '#a6adbb' },
+          grid: {
+            color: isGridVisible ? 'rgba(166, 173, 187, 0.4)' : 'rgba(0, 0, 0, 0.1)',
+          },
         },
+        
         y: {
-            ticks: { color: '#a6adbb' }
-        }
+          ticks: { color: '#a6adbb' },
+          grid: {
+            color: isGridVisible ? 'rgba(166, 173, 187, 0.4)' : 'rgba(0, 0, 0, 0.1)',
+          },
+        },
     }
   };
 
