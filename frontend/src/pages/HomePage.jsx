@@ -46,14 +46,11 @@ const HomePage = () => {
       {isRateLimited && <RateLimitedUI />}
 
       <div className="container mx-auto px-4 py-12 text-base-content">
-        <header className="text-center mb-10">
-          <h1 className="text-5xl font-bold mb-2 text-primary">
-            Stock Predictor
-          </h1>
+        {/* <header className="text-center mb-10">
           <p className="text-lg text-base-content/70">
             Leveraging Machine Learning to Forecast Stock Market Trends
           </p>
-        </header>
+        </header> */}
 
         <main className="flex justify-center">
           {/* We are placing the StockPredictor component right in the middle of the homepage */}

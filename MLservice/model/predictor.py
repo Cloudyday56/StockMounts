@@ -214,7 +214,6 @@ class StockPredictor:
         else:
             # For backward compatibility with old saved models
             self.model = model_data
-            # We'll need to infer feature columns later
         
         print("Model loaded successfully.")
 

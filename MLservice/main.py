@@ -29,9 +29,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-predictor = None
+EXPERT_STOCKS = ["AAPL", "GOOG", "MSFT", "TSLA", "AMZN", "NFLX", "META", "NVDA", "AMD", "INTC", "BABA", "SPY"]
+models = {}
 
-# ... (convert_numpy_types and load_model functions remain the same) ...
+@app.on_event("startup") #run only once to load all models
+def load_all_models():
+    """Load all expert models into a dictionary."""
+    global models #accessible anywhere
+    for stock in EXPERT_STOCKS:
+        model_path = Path(f"trained_models/model_{stock}.joblib")
+        if model_path.exists():
+            predictor = StockPredictor()
+            predictor.load_model(model_path)
+            models[stock] = predictor
+        else:
+            print(f"Warning: Model file not found for {stock} at {model_path}.")
+
+# Helper function to convert numpy types to native Python types
 def convert_numpy_types(obj):
     if isinstance(obj, dict):
         return {k: convert_numpy_types(v) for k, v in obj.items()}
@@ -46,46 +60,35 @@ def convert_numpy_types(obj):
     else:
         return obj
 
-@app.on_event("startup")
-def load_model():
-    global predictor
-    model_path = Path(__file__).parent / "trained_models" / "model_AAPL.joblib"
-    if not model_path.exists():
-        print(f"Warning: Model file not found at {model_path}. The /predict endpoint will not work.")
-        return
-    print(f"Loading model from {model_path}...")
-    predictor = StockPredictor()
-    predictor.load_model(model_path)
-    print("Model loaded successfully.")
-
 @app.get("/")
 def read_root():
-    return {"message": "ML Service is running. Go to /docs for API documentation."}
+    return {"message": "ML Service is running"}
 
 
 @app.get("/predict/{ticker}")
 def get_prediction(ticker: str, period: str = "1y"):
-    if predictor is None:
-        raise HTTPException(status_code=503, detail="Model is not available. Check server logs for errors.")
     
+    
+    predictor = models.get(ticker.upper(), models.get("SPY")) # Default to SPY if ticker not found
+
     try:
-        # 1. Get the prediction
+        # Get the prediction
         prediction_data = predictor.predict_tomorrow(ticker, period)
         
-        # 2. Fetch historical data for the chart
+        # Fetch historical data for the chart
         hist_data = fetch_stock_data(ticker, period='1y')
         hist_data = add_technical_indicators(hist_data) # Calculate SMA
         
         hist_data = hist_data.fillna(value=np.nan).replace([np.nan], [None])
 
-        # 3. Format data for Chart.js
+        # Format data for Chart.js
         chart_data = {
             "labels": hist_data.index.strftime('%Y-%m-%d').tolist(),
             "prices": hist_data['Close'].tolist(),
             "sma": hist_data['SMA_50'].tolist()
         }
 
-        # 4. Combine all data into one response
+        # Combine all data into one response
         response_data = {
             **prediction_data,
             "chartData": chart_data
