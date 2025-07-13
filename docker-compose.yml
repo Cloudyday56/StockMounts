@@ -1,6 +1,6 @@
 services:
   backend:
-    build: .
+    build: ./backend
     ports:
       - "5001:5001"
     environment:
@@ -8,4 +8,17 @@ services:
       - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL}
       - UPSTASH_REDIS_REST_TOKEN=${UPSTASH_REDIS_REST_TOKEN}
       - PORT=5001
-
+    depends_on:
+      - mlservice
+    
+  mlservice:
+    build: ./MLservice
+    ports:
+      - "8000:8000"
+  
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
