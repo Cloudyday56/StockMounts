@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: backend
+    env: docker
+    dockerfilePath: backend/Dockerfile
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: UPSTASH_REDIS_REST_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_TOKEN
+        sync: false
+      - key: PORT
+        value: 5001
+      - key: NODE_ENV
+        value: production
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /api/notes
+    buildCommand: ''
+    startCommand: ''
+
+  - type: web
+    name: mlservice
+    env: docker
+    dockerfilePath: MLservice/Dockerfile
+    plan: free
+    autoDeploy: true
+
+  - type: web
+    name: frontend
+    env: docker
+    dockerfilePath: frontend/Dockerfile
+    plan: free
+    autoDeploy: true
+
