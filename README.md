@@ -1,4 +1,5 @@
 # StockMounts
+<img width="1113" height="833" alt="Screenshot 2025-07-12 at 15 39 23" src="https://github.com/user-attachments/assets/0e5d72d8-ab35-4310-b588-77a8d8bf079b" />
 
 A Dockerized full-stack MERN + Python Machine Learning app for taking trading notes and predicting stock prices.
 
