@@ -32,7 +32,3 @@ yarn-error.log*
 DS_Store
 Thumbs.db
 
-# ML Models & Data (optional)
-# Uncomment the lines below if your models or data files are too large for Git
-# MLservice/trained_models/
-# MLservice/data/

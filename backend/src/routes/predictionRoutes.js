@@ -4,7 +4,7 @@ import axios from 'axios';
 const router = express.Router();
 
 // The base URL for your Python ML service
-const ML_API_URL = 'http://127.0.0.1:8000';
+const ML_API_URL = 'http://mlservice:8000';
 
 /**
  * @route   GET /api/predict/:ticker

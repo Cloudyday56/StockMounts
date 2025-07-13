@@ -17,14 +17,25 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 const __dirname = path.resolve(); // Get the current directory name
 
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost"
+];
 
 //middleware
-if (process.env.NODE_ENV !== "production") { // Enable CORS only in development mode
-    app.use(
-        cors({
-            origin:"http://localhost:5173", // Allow requests from this origin (frontend)
-        })
-    ); // Enable CORS for all routes (Cross-Origin Resource Sharing)
+app.use(
+    cors({
+        origin: allowedOrigins, // Allow requests from these origins
+        credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+    })
+); // Enable CORS for all routes (Cross-Origin Resource Sharing)
+
+//deploy under PRODUCTION
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../frontend/dist"))); // Serve static files from the "dist" directory in frontend
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../frontend/dist/index.html")); // Serve the index.html file for the root route
+    });
 }
 
 app.use(express.json()); //before routes to parse JSON bodies (so that req.body ({title, content}) is available in the routes)
@@ -34,18 +45,13 @@ app.use("/api/notes", notesRoutes); // Middleware to parse JSON bodies
 app.use("/api/predict", predictionRoutes); // Middleware for prediction routes
 // app.use("/api/whatever", whateverRoutes);
 
-if (process.env.NODE_ENV === "production") { //deploy only under production
-    app.use(express.static(path.join(__dirname, "../frontend/dist"))); // Serve static files from the "dist" directory in frontend
-    app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "../frontend/dist/index.html")); // Serve the index.html file for the root route
-    });
-}
 
-//An ENDPOINT is a combination of a URL + HTTP method
-// (like GET, POST, etc.) that allows clients to interact with the server.
 
 connectDB().then(() => {
     app.listen(PORT, () => {
         console.log("Server is running on port:", PORT); //run the app
     });
 });
+
+//An ENDPOINT is a combination of a URL + HTTP method
+// (like GET, POST, etc.) that allows clients to interact with the server.
