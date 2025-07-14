@@ -5,7 +5,7 @@ const router = express.Router();
 
 // The base URL for your Python ML service
 const ML_API_URL = process.env.NODE_ENV === 'production'
-  ? 'https://mlservice-c24c.onrender.com'
+  ? 'https://mlservice-i6if.onrender.com'
   : 'http://mlservice:8000';
 
 /**

@@ -20,7 +20,7 @@ const __dirname = path.resolve(); // Get the current directory name
 const allowedOrigins = [
     "http://localhost:5173",
     "http://localhost",
-    "https://frontend-yeqg.onrender.com" // public frontend URL
+    "https://stockmounts.onrender.com" // public frontend URL
 ];
 
 //middleware
