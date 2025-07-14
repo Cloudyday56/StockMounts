@@ -28,7 +28,7 @@ services:
     autoDeploy: true
 
   - type: web
-    name: frontend
+    name: stockmounts
     env: docker
     dockerfilePath: frontend/Dockerfile
     dockerContext: ./frontend
