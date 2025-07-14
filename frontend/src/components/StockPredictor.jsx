@@ -58,7 +58,7 @@ const StockPredictor = () => {
 
       {/* Show a loading skeleton or the prediction */}
       {loading && !prediction && (
-        <div className="mt-6 text-center">Loading initial data... (may take a few minutes to load models) </div>
+        <div className="mt-6 text-center">Loading data... (may take a few minutes initially) </div>
       )}
 
       {prediction && (
