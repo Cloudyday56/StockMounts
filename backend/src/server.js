@@ -30,13 +30,13 @@ app.use(
     })
 ); // Enable CORS for all routes (Cross-Origin Resource Sharing)
 
-//deploy under PRODUCTION
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "../frontend/dist"))); // Serve static files from the "dist" directory in frontend
-    app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "../frontend/dist/index.html")); // Serve the index.html file for the root route
-    });
-}
+//deploy under PRODUCTION (for monorepo, not for multi service deployment)
+// if (process.env.NODE_ENV === "production") {
+//     app.use(express.static(path.join(__dirname, "../frontend/dist"))); // Serve static files from the "dist" directory in frontend
+//     app.get("*", (req, res) => {
+//         res.sendFile(path.join(__dirname, "../frontend/dist/index.html")); // Serve the index.html file for the root route
+//     });
+// }
 
 app.use(express.json()); //before routes to parse JSON bodies (so that req.body ({title, content}) is available in the routes)
 app.use(rateLimiter); // Middleware to limit the rate of requests
