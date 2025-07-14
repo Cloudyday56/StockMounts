@@ -19,6 +19,9 @@ origins = [
     "http://localhost:3000",
     "http://localhost:5001", # Default Vite dev port for frontend
     "http://localhost:5000",
+    "https://frontend-yeqg.onrender.com",
+    "https://backend-8zce.onrender.com",
+
 ]
 
 app.add_middleware(
