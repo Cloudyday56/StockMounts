@@ -31,5 +31,4 @@ services:
     dockerfilePath: frontend/Dockerfile
     plan: free
     autoDeploy: true
-    healthCheckPath: /
 
