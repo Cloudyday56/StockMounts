@@ -3,6 +3,7 @@ services:
     name: backend
     env: docker
     dockerfilePath: backend/Dockerfile
+    dockerContext: ./backend
     envVars:
       - key: MONGO_URI
         sync: false
@@ -22,6 +23,7 @@ services:
     name: mlservice
     env: docker
     dockerfilePath: MLservice/Dockerfile
+    dockerContext: ./MLservice
     plan: free
     autoDeploy: true
 
@@ -29,6 +31,7 @@ services:
     name: frontend
     env: docker
     dockerfilePath: frontend/Dockerfile
+    dockerContext: ./frontend
     plan: free
     autoDeploy: true
 
