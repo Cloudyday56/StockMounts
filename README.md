@@ -2,6 +2,7 @@
 <img width="1113" height="833" alt="Screenshot 2025-07-12 at 15 39 23" src="https://github.com/user-attachments/assets/0e5d72d8-ab35-4310-b588-77a8d8bf079b" />
 
 A Dockerized full-stack MERN + Python Machine Learning app for taking trading notes and predicting stock prices.
+**Hosted at:** [https://stockmounts.onrender.com](https://stockmounts.onrender.com)
 
 ## Features
 
@@ -54,12 +55,13 @@ A Dockerized full-stack MERN + Python Machine Learning app for taking trading no
 
 ### Setup & Running (with Docker Compose)
 
-1. Copy `.env.example` to `.env` in the project root and fill in your MongoDB and Upstash credentials.
-2. From the project root, run:
+1. Create `.env` in the project root and fill in your MongoDB and Upstash credentials (see below).
+2. Change url in nginx.conf for local development
+3. From the project root, run:
    ```sh
    docker compose up --build
    ```
-3. Access the app:
+4. Access the app:
    - Frontend: http://localhost/
    - Backend API: http://localhost:5001/
    - ML Service: http://localhost:8000/
