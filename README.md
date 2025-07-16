@@ -1,4 +1,5 @@
 # StockMounts
+
 <img width="1113" height="833" alt="Screenshot 2025-07-12 at 15 39 23" src="https://github.com/user-attachments/assets/0e5d72d8-ab35-4310-b588-77a8d8bf079b" />
 
 A Dockerized full-stack MERN + Python Machine Learning app for taking trading notes and predicting stock prices.
@@ -53,18 +54,52 @@ A Dockerized full-stack MERN + Python Machine Learning app for taking trading no
 - MongoDB Atlas account (or local MongoDB)
 - Upstash Redis account (for rate limiting)
 
-### Setup & Running (with Docker Compose)
+## Running in Development vs Production
 
-1. Create `.env` in the project root and fill in your MongoDB and Upstash credentials (see below).
-2. Change url in nginx.conf for local development
-3. From the project root, run:
+### Development Mode (Local Docker Compose)
+
+1. **Create a `.env` file** in the project root and fill in your MongoDB and Upstash credentials (see the Environment Variables section below).
+2. In `docker-compose.yml`, **uncomment** the following lines under the `backend` service:
+   ```yaml
+   environment:
+     - NODE_ENV=development
+   command: npm run dev
+   volumes:
+     - ./backend:/app
+   ```
+3. In `frontend/nginx.conf`, **uncomment** this line and **comment out** the public URL line (replace with your own backend's public URL if deploying elsewhere):
+   ```nginx
+   proxy_pass http://backend:5001/api/;
+   # proxy_pass https://your-backend-public-url/api/;
+   ```
+4. Run:
    ```sh
    docker compose up --build
    ```
-4. Access the app:
-   - Frontend: http://localhost/
-   - Backend API: http://localhost:5001/
-   - ML Service: http://localhost:8000/
+5. Access the app at http://localhost
+
+### Production Mode (Local or Deployment)
+
+1. **Create a `.env` file** in the project root and fill in your MongoDB and Upstash credentials (see the Environment Variables section below).
+2. In `docker-compose.yml`, **comment out** the following lines under the `backend` service:
+   ```yaml
+   # - NODE_ENV=development
+   # command: npm run dev
+   # volumes:
+   #   - ./backend:/app
+   ```
+3. In `frontend/nginx.conf`, **uncomment** the public URL line (replace with your own backend's public URL if deploying elsewhere) and **comment out** the local backend line:
+   ```nginx
+   proxy_pass https://your-backend-public-url/api/;
+   # proxy_pass http://backend:5001/api/;
+   ```
+4. Run:
+   ```sh
+   docker compose up --build
+   ```
+5. Access the app at http://localhost (for local production) or at your own deployed public URL if running on a server (replace with your deployment's actual URL).
+
+---
 
 ## Environment Variables
 

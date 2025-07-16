@@ -8,6 +8,11 @@ services:
       - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL}
       - UPSTASH_REDIS_REST_TOKEN=${UPSTASH_REDIS_REST_TOKEN}
       - PORT=5001
+    # Uncomment the following 4 lines to run the backend in development mode
+    #   - NODE_ENV=development
+    # command: npm run dev
+    # volumes:
+    #   - ./backend:/app
     depends_on:
       - mlservice
     
