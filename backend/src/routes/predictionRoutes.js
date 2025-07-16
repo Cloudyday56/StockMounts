@@ -6,7 +6,7 @@ const router = express.Router();
 // The base URL for your Python ML service
 const ML_API_URL = process.env.NODE_ENV === 'production'
   ? 'https://mlservice-i6if.onrender.com'
-  : 'http://mlservice:8000';
+  : 'http://mlservice:8000'; // Use http://localhost:8000 for non-docker development
 
 /**
  * @route   GET /api/predict/:ticker
