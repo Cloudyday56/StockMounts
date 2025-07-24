@@ -1,10 +1,13 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors"; // Import CORS middleware for handling cross-origin requests
-import path from "path"; // Import path module for handling file paths
+// import path from "path"; // Import path module for handling file paths
+
+import cookieParser from "cookie-parser";
 
 import notesRoutes from "./routes/notesRoutes.js";
 import predictionRoutes from "./routes/predictionRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 import { connectDB } from "./config/db.js";
 import rateLimiter from "./middleware/rateLimiter.js";
@@ -39,11 +42,14 @@ app.use(
 //     });
 // }
 
+app.use(cookieParser()); // Middleware to parse cookies
 app.use(express.json()); //before routes to parse JSON bodies (so that req.body ({title, content}) is available in the routes)
 app.use(rateLimiter); // Middleware to limit the rate of requests
 
+
 app.use("/api/notes", notesRoutes); // Middleware to parse JSON bodies
 app.use("/api/predict", predictionRoutes); // Middleware for prediction routes
+app.use("/api/auth", authRoutes); // Middleware for authentication routes
 // app.use("/api/whatever", whateverRoutes);
 
 
