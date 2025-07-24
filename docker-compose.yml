@@ -8,11 +8,12 @@ services:
       - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL}
       - UPSTASH_REDIS_REST_TOKEN=${UPSTASH_REDIS_REST_TOKEN}
       - PORT=5001
-      # Uncomment the following 4 lines to run the backend in development mode
+      # Comment out the following 4 lines to run the backend in production mode
       - NODE_ENV=development
     command: npm run dev
     volumes:
       - ./backend:/app
+
     depends_on:
       - mlservice
 
@@ -24,16 +25,17 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev # Use Dockerfile.dev for development
+      dockerfile: Dockerfile.dev # Comment out for production
     ports:
       # - "80:80" # Production port
       - "5173:5173" # Development port
-      # Uncomment the following 4 lines to run the frontend in development mode
+      # Comment out the following 5 lines to run the frontend in production mode
     environment:
       - NODE_ENV=development
     volumes:
       - ./frontend:/app
       - frontend_node_modules:/app/node_modules
+
     command: npm run dev -- --host
     depends_on:
       - backend

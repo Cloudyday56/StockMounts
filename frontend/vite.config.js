@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {
+    proxy: { // for local development
       '/api': {
         target: 'http://backend:5001', // Docker Compose network
         changeOrigin: true,
