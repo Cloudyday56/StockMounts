@@ -4,4 +4,13 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: { // for local development
+      '/api': {
+        target: 'http://backend:5001', // Docker Compose network
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 })
