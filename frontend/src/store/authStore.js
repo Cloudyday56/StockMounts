@@ -22,7 +22,7 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true, error: null }); //start loading while signing up
     try {
       const response = await axios.post(`${API_URL}/signup`, { email, password, name });
-      set({ user: response.data.user, isAuthenticated: true, isLoading: false });
+      set({ user: response.data, isAuthenticated: true, isLoading: false });
     } catch (error) {
       set({ error: error.response.data.message, isLoading: false });
       throw error;
@@ -34,7 +34,7 @@ export const useAuthStore = create((set) => ({
     set({ isCheckingAuth: true, error: null }); //start checking auth
     try {
       const response = await axios.get(`${API_URL}/check-auth`);
-      set({ user: response.data.user, isAuthenticated: true, isCheckingAuth: false });
+      set({ user: response.data, isAuthenticated: true, isCheckingAuth: false });
     } catch (error) {
       set({ error: null, isCheckingAuth: false, isAuthenticated: false });
     }
@@ -45,7 +45,7 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true, error: null }); //start loading while logging in
     try {
       const response = await axios.post(`${API_URL}/login`, { email, password });
-      set({ user: response.data.user, isAuthenticated: true, isLoading: false, error: null });
+      set({ user: response.data, isAuthenticated: true, isLoading: false, error: null });
     } catch (error) {
       set({ error: error.response.data.message, isLoading: false });
       throw error;
@@ -69,7 +69,7 @@ export const useAuthStore = create((set) => ({
     set({isUpdatingProfile: true}); //set loading state
     try {
       const response = await axios.put(`${API_URL}/update-profile`, data); //send the profile update request
-      set({user: response.data.user, isAuthenticated: true, isUpdatingProfile: false, error: null}); //update user state with new profile data
+      set({user: response.data, isAuthenticated: true, isUpdatingProfile: false, error: null}); //update user state with new profile data
       toast.success('Profile updated successfully!');
     } catch (error) {
       console.log('Error updating profile:', error);

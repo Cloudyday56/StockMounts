@@ -7,6 +7,9 @@ import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 
+import { Loader } from "lucide-react";
+import { useEffect } from "react";
+
 // import toast from 'react-hot-toast';
 import { Routes, Route } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
@@ -32,6 +35,14 @@ const RedirectAuthenticated = ({ children }) => {
 };
 
 const App = () => {
+  const { checkAuth, isCheckingAuth } = useAuthStore();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  if (isCheckingAuth) {return <Loader />}
+
   return (
     <div className="relative h-full w-hull">
       {/* the gradient effect at the bottom */}
