@@ -59,6 +59,7 @@ A Dockerized full-stack MERN + Python Machine Learning app for taking trading no
 ### Development Mode (Local Docker Compose)
 
 1. **Create a `.env` file** in the project root and fill in your MongoDB and Upstash credentials (see the Environment Variables section below).
+
 2. In `docker-compose.yml`, **uncomment** the following lines under the `backend` service:
    ```yaml
    environment:
@@ -67,20 +68,37 @@ A Dockerized full-stack MERN + Python Machine Learning app for taking trading no
    volumes:
      - ./backend:/app
    ```
-3. In `frontend/nginx.conf`, **uncomment** this line and **comment out** the public URL line (replace with your own backend's public URL if deploying elsewhere):
+3. In `docker-compose.yml`, set the frontend service to use development mode:
+   ```yaml
+   frontend:
+     build:
+       context: ./frontend
+       dockerfile: Dockerfile.dev # Use Dockerfile.dev for development
+     ports:
+       - "5173:5173"
+     environment:
+       - NODE_ENV=development
+     volumes:
+       - ./frontend:/app
+     command: npm run dev -- --host
+     depends_on:
+       - backend
+   ```
+4. In `frontend/nginx.conf`, **uncomment** this line and **comment out** the public URL line (replace with your own backend's public URL if deploying elsewhere):
    ```nginx
    proxy_pass http://backend:5001/api/;
    # proxy_pass https://your-backend-public-url/api/;
    ```
-4. Run:
+5. Run:
    ```sh
    docker compose up --build
    ```
-5. Access the app at http://localhost
+6. Access the app at http://localhost:5173
 
 ### Production Mode (Local or Deployment)
 
 1. **Create a `.env` file** in the project root and fill in your MongoDB and Upstash credentials (see the Environment Variables section below).
+
 2. In `docker-compose.yml`, **comment out** the following lines under the `backend` service:
    ```yaml
    # - NODE_ENV=development
@@ -88,16 +106,40 @@ A Dockerized full-stack MERN + Python Machine Learning app for taking trading no
    # volumes:
    #   - ./backend:/app
    ```
-3. In `frontend/nginx.conf`, **uncomment** the public URL line (replace with your own backend's public URL if deploying elsewhere) and **comment out** the local backend line:
+3. In `docker-compose.yml`, set the frontend service to use production mode by making these changes:
+
+   - **Comment out** the `dockerfile: Dockerfile.dev` line (or remove it entirely)
+   - **Uncomment** the port `80:80` line and **comment out** the `5173:5173` line
+   - **Remove** or **comment out** the `environment:`, `volumes:`, and `command:` lines for the frontend service
+
+   Example:
+
+   ```yaml
+   frontend:
+     build:
+       context: ./frontend
+       # dockerfile: Dockerfile.dev # Comment this out for production
+     ports:
+       - "80:80"
+     # environment:
+     #   - NODE_ENV=development
+     # volumes:
+     #   - ./frontend:/app
+     # command: npm run dev -- --host
+     depends_on:
+       - backend
+   ```
+
+4. In `frontend/nginx.conf`, **uncomment** the public URL line (replace with your own backend's public URL if deploying elsewhere) and **comment out** the local backend line:
    ```nginx
    proxy_pass https://your-backend-public-url/api/;
    # proxy_pass http://backend:5001/api/;
    ```
-4. Run:
+5. Run:
    ```sh
    docker compose up --build
    ```
-5. Access the app at http://localhost (for local production) or at your own deployed public URL if running on a server (replace with your deployment's actual URL).
+6. Access the app at http://localhost (for local production) or at your own deployed public URL if running on a server (replace with your deployment's actual URL).
 
 ---
 

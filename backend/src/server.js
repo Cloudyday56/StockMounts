@@ -15,7 +15,7 @@ dotenv.config(); // Load environment variables from .env file
 // const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5001;
-const __dirname = path.resolve(); // Get the current directory name
+// const __dirname = path.resolve(); // Get the current directory name
 
 const allowedOrigins = [
     "http://localhost:5173",
