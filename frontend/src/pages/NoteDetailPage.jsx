@@ -1,17 +1,17 @@
-import React, { use } from 'react'
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router';
-import api from '../lib/axios'; // Import the axios instance
-import { LoaderIcon, Trash2Icon, ArrowLeftIcon } from 'lucide-react';
-import { Link } from 'react-router'
-import toast from 'react-hot-toast';
-
+import React, { use } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router";
+import api from "../lib/axios"; // Import the axios instance
+import { LoaderIcon, Trash2Icon, ArrowLeftIcon } from "lucide-react";
+import { Link } from "react-router";
+import toast from "react-hot-toast";
+import { useAuthStore } from "../store/authStore";
 
 const NoteDetailPage = () => {
-
   const [note, setNote] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const { user } = useAuthStore();
 
   const navigate = useNavigate(); // Use navigate to redirect after saving or deleting
 
@@ -28,18 +28,17 @@ const NoteDetailPage = () => {
         // }
         setNote(response.data);
       } catch (error) {
-        console.error('Error fetching note:', error);
-        toast.error('Failed to fetch note');
+        console.error("Error fetching note:", error);
+        toast.error("Failed to fetch note");
       } finally {
         setLoading(false);
       }
     };
 
     fetchNote();
-  }, [id])
+  }, [id]);
 
   // console.log(note);
-
 
   //handle delete
   const handleDelete = async () => {
@@ -49,69 +48,71 @@ const NoteDetailPage = () => {
 
     try {
       await api.delete(`/notes/${id}`);
-      toast.success('Note deleted successfully');
-      navigate('/'); // Redirect to home page after deletion
+      toast.success("Note deleted successfully");
+      navigate("/"); // Redirect to home page after deletion
     } catch (error) {
-      console.error('Error deleting note:', error);
-      toast.error('Failed to delete note');
+      console.error("Error deleting note:", error);
+      toast.error("Failed to delete note");
     }
-  }
+  };
 
   //handle save
   const handleSave = async () => {
     if (!note.title.trim() || !note.content.trim()) {
-      toast.error('Please add title and content');
+      toast.error("Please add title and content");
       return;
     }
 
     setSaving(true); //save
 
     try {
-      await api.put(`/notes/${id}`, note);
-      toast.success('Note updated successfully');
-      navigate('/'); // Redirect to home page after deletion
+      await api.put(`/notes/${id}`, {
+        ...note,
+      });
+      toast.success("Note updated successfully");
+      navigate("/"); // Redirect to home page after update
     } catch (error) {
-      console.error('Error updating note:', error);
-      toast.error('Failed to update note');
+      console.error("Error updating note:", error);
+      toast.error("Failed to update note");
     } finally {
       setSaving(false); // reset saving state
     }
-  }
+  };
 
   //handle loading
   if (loading) {
     return (
-      <div className='min-h-screen bg-base-200 flex items-center justify-center'>
+      <div className="min-h-screen bg-base-200 flex items-center justify-center">
         {/* spinning icon */}
         <LoaderIcon className="w-8 h-8 animate-spin text-gray-500" />
       </div>
     );
   }
 
-
   return (
-    <div className='min-h-screen bg-base-200'>
-      <div className='container mx-auto px-4 py-8'>
-        <div className='max-w-2xl mx-auto'>
-
+    <div className="min-h-screen bg-base-200">
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto">
           {/* header (back and delete) */}
           <div className="flex items-center justify-between mb-6">
-              {/* back button */}
-              <Link to="/" className="btn btn-ghost">
-                <ArrowLeftIcon className="h-5 w-5" />
-                Back to Notes
-              </Link>
-              {/* delete button */}
-              <button onClick={handleDelete} className="btn btn-error btn-outline">
-                <Trash2Icon className="h-5 w-5" />
-                Delete Note
-              </button>
+            {/* back button */}
+            <Link to="/" className="btn btn-ghost">
+              <ArrowLeftIcon className="h-5 w-5" />
+              Back to Notes
+            </Link>
+            {/* delete button */}
+            <button
+              onClick={handleDelete}
+              className="btn btn-error btn-outline"
+            >
+              <Trash2Icon className="h-5 w-5" />
+              Delete Note
+            </button>
           </div>
 
           {/* note content*/}
-          <div className='card bg-base-100'>
+          <div className="card bg-base-100">
             <div className="card-body">
-
               {/* title & title name (modifiable) */}
               <div className="form-control mb-4">
                 <label className="label">
@@ -135,24 +136,28 @@ const NoteDetailPage = () => {
                   placeholder="Write your note here..."
                   className="textarea textarea-bordered h-32"
                   value={note.content}
-                  onChange={(e) => setNote({ ...note, content: e.target.value })}
+                  onChange={(e) =>
+                    setNote({ ...note, content: e.target.value })
+                  }
                 />
               </div>
 
               {/* Save button */}
               <div className="card-actions justify-end">
-                <button className="btn btn-primary" disabled={saving} onClick={handleSave}>
+                <button
+                  className="btn btn-primary"
+                  disabled={saving}
+                  onClick={handleSave}
+                >
                   {saving ? "Saving..." : "Save Changes"}
                 </button>
               </div>
-
             </div>
           </div>
-
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NoteDetailPage
+export default NoteDetailPage;

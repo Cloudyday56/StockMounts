@@ -19,9 +19,18 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-black bg-opacity-80">
       <div className="w-full max-w-2xl bg-[#18181b] rounded-2xl shadow-xl overflow-hidden">
         <div className="p-8">
-          <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-yellow-400 to-amber-600 text-transparent bg-clip-text">
-            Welcome Back
-          </h2>
+          <div className="flex items-center justify-between mb-6 w-full">
+            <Link
+              to="/"
+              className="inline-block px-6 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold rounded-lg shadow-lg hover:from-yellow-500 hover:to-amber-600 transition"
+            >
+              Home
+            </Link>
+            <h2 className="text-3xl font-bold text-center flex-1 bg-gradient-to-r from-yellow-400 to-amber-600 text-transparent bg-clip-text">
+              Welcome Back
+            </h2>
+            <div className="w-24" />
+          </div>
 
           <form onSubmit={handleLogin}>
             <Input
@@ -48,14 +57,20 @@ const LoginPage = () => {
                 Forgot password?
               </Link>
             </div>
-            {error && <p className='text-red-500 font-semibold mb-2'>{error}</p>}
+            {error && (
+              <p className="text-red-500 font-semibold mb-2">{error}</p>
+            )}
 
             <button
               className="w-full py-3 px-4 bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-bold rounded-lg shadow-lg hover:from-yellow-600 hover:to-amber-700 transition duration-200"
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? <Loader className='w-6 h-6 animate-spin  mx-auto' /> : "Login"}
+              {isLoading ? (
+                <Loader className="w-6 h-6 animate-spin  mx-auto" />
+              ) : (
+                "Login"
+              )}
             </button>
           </form>
         </div>

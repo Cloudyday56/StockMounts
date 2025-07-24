@@ -21,6 +21,7 @@ export const verifyToken = async (req, res, next) => {
       return res.status(401).json({ success: false, message: "User not found" });
     }
     req.user = user;
+    req.userId = user._id;
     //proceed if token is valid
     next();
   } catch (error) {

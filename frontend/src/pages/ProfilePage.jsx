@@ -12,7 +12,6 @@ const ProfilePage = () => {
     updateProfile,
     deleteAccount,
     logout,
-    isCheckingAuth,
   } = useAuthStore();
   const [selectedImage, setSelectedImage] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);

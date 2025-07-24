@@ -25,7 +25,7 @@ const Navbar = () => {
                 <img
                   src={user?.profilePic || "/avatar.png"}
                   alt="Profile"
-                  className="w-9 h-9 rounded-full object-cover border-2 border-primary hover:scale-105 transition-all"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-primary hover:scale-105 transition-all"
                 />
               </Link>
             )}
