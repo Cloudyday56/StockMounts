@@ -20,7 +20,7 @@ const SignUpPage = () => {
     try {
       await signup(email.toLowerCase(), password, name);
       console.log("Sign up clicked", { email, password, name });
-      navigate("/verify-email");
+      navigate("/"); //redirect to home page after successful signup
     } catch (error) {
       console.log(error);
     }
