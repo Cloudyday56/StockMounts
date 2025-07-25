@@ -18,7 +18,7 @@ const ProfilePage = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const navigate = useNavigate();
 
-  console.log("User data:", user);
+
   //compress image
   const compressImage = (imgSrc, maxWidth = 800, quality = 0.7) => {
     return new Promise((resolve) => {
@@ -72,6 +72,7 @@ const ProfilePage = () => {
     reader.readAsDataURL(file);
 
     reader.onload = async () => {
+      console.log("Image loaded:", reader.result);
       const compressedImage = await compressImage(reader.result);
 
       // Check compressed size (1MB limit)
@@ -91,7 +92,7 @@ const ProfilePage = () => {
   //delete account confirmation
   const handleDeleteAccount = async () => {
     await deleteAccount();
-    navigate("/login");
+    navigate("/");
   };
 
   const handleLogout = () => {

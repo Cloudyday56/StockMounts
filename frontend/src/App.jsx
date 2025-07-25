@@ -53,7 +53,6 @@ const App = () => {
     checkAuth();
   }, [checkAuth]);
 
-
   return (
     <div className="relative h-full w-hull">
       {/* the gradient effect at the bottom */}

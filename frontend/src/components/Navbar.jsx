@@ -37,7 +37,7 @@ const Navbar = () => {
               </button>
             ) : (
               <Link to="/login" className="btn btn-outline btn-primary">
-                Sign In
+                Login
               </Link>
             )}
           </div>

@@ -104,10 +104,10 @@ export const useAuthStore = create((set) => ({
         isUpdatingProfile: false,
         error: null,
       }); //update user state with new profile data
-      toast.success("Profile updated successfully!");
+      toast.success("Profile updated successfully");
     } catch (error) {
       console.log("Error updating profile:", error);
-      toast.error(error.response.data.message);
+      toast.error(error.response.data.message || "Error updating profile");
     } finally {
       set({ isUpdatingProfile: false }); //reset loading state
     }

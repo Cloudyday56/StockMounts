@@ -10,7 +10,7 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
 
-router.post("/update-profile", verifyToken, updateProfile);
+router.put("/update-profile", verifyToken, updateProfile);
 router.delete("/delete-account", verifyToken, deleteAccount);
 
 export default router;
