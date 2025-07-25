@@ -111,7 +111,31 @@ const NoteDetailPage = () => {
           {/* note content*/}
           <div className="card bg-base-100">
             <div className="card-body">
-              <h2 className="card-title text-2xl mb-4">Detail</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="card-title text-2xl">Detail</h2>
+                <button
+                  type="button"
+                  className={`btn w-32 text-lg font-bold transition-colors duration-150
+                    ${
+                      note.indicator === "buy"
+                        ? "btn-success"
+                        : note.indicator === "sell"
+                        ? "btn-error"
+                        : "btn-secondary"
+                    }
+                    hover:btn-outline hover:btn-neutral`}
+                  onClick={() => {
+                    note.indicator === "note"
+                      ? setNote({ ...note, indicator: "buy" })
+                      : note.indicator === "buy"
+                      ? setNote({ ...note, indicator: "sell" })
+                      : setNote({ ...note, indicator: "note" });
+                  }}
+                >
+                  {note.indicator.toUpperCase()}
+                </button>
+              </div>
+
               {/* title & title name (modifiable) */}
               <div className="form-control mb-4">
                 <label className="label">
