@@ -72,8 +72,8 @@ const SignUpPage = () => {
 
             <button
               type="submit"
-              className="btn btn-primary w-full mt-4"
-              disabled={isLoading}
+              className="w-full py-3 px-4 bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-bold rounded-lg shadow-lg hover:from-yellow-600 hover:to-amber-700 transition duration-200 disabled:opacity-50"
+              disabled={isLoading || !email || !password || !name}
             >
               {isLoading ? (
                 "Signing Up..."
