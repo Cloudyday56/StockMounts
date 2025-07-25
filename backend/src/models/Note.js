@@ -18,6 +18,12 @@ const noteSchema = new mongoose.Schema({
     ref: "User", // Reference to the User model
     required: true,
   },
+  indicator: {
+    type: String,
+    enum: ["buy", "sell", "note"], // Restrict to specific values
+    default: "note", // Default value if not specified
+    required: true,
+  },
 }, {
   timestamps: true, // Automatically adds createdAt and updatedAt fields
 });

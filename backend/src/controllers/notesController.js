@@ -33,8 +33,8 @@ export async function getNoteById(req, res) {
 
 export async function createNote(req, res) {
   try {
-    const { title, content } = req.body;
-    const newNote = new Note({ title, content, owner: req.userId });
+    const { title, content, indicator } = req.body;
+    const newNote = new Note({ title, content, indicator, owner: req.userId });
 
     const saveNote = await newNote.save();
     res
@@ -49,12 +49,12 @@ export async function createNote(req, res) {
 //need the note ID to update a specific note
 export async function updateNote(req, res) {
   try {
-    const { title, content } = req.body;
+    const { title, content, indicator } = req.body;
     const { id } = req.params;
     // Only allow update if the note belongs to the user
     const updatedNote = await Note.findOneAndUpdate(
       { _id: id, owner: req.userId },
-      { title, content },
+      { title, content, indicator },
       { new: true }
     );
     if (!updatedNote) {

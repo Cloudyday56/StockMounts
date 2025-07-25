@@ -5,7 +5,7 @@ import { formatDate } from "../lib/utils";
 import api from "../lib/axios";
 import toast from "react-hot-toast";
 
-const NoteCard = ({ note,setNotes }) => {
+const NoteCard = ({ note, setNotes }) => {
   const handleDelete = async (e, id) => {
     e.preventDefault(); // get rid of the navigation behaviour
 
@@ -19,33 +19,46 @@ const NoteCard = ({ note,setNotes }) => {
     } catch (error) {
       console.log("Error in handleDelete", error);
       toast.error("Failed to delete note");
-    };
+    }
   };
 
   return (
     // the whole thing is clickable
     <Link
       to={`/note/${note._id}`}
-      className="card bg-base-200 hover:shadow-lg transition-all duration-200
-      border-t-4 border-solid border-[#F3A326]"
+      className="card bg-base-200 hover:shadow-lg transition-all duration-200 border-t-4 border-solid border-[#F3A326]"
     >
       <div className="card-body">
-        <h3 className="card-title text-base-content">{note.title}</h3>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="card-title text-base-content">{note.title}</h3>
+          <span
+            className={`btn btn-md font-bold px-4 py-2 text-base pointer-events-none
+              ${
+                note.indicator === "buy"
+                  ? "btn-success"
+                  : note.indicator === "sell"
+                  ? "btn-error"
+                  : "btn-secondary"
+              }`}
+          >
+            {note.indicator ? note.indicator.toUpperCase() : "NOTE"}
+          </span>
+        </div>
         <p className="text-base-content/70 line-clamp-3">{note.content}</p>
         <div className="card-actions justify-between items-center mt-4">
           <span className="text-sm text-base-content/60">
             {formatDate(new Date(note.createdAt))}
           </span>
           <div className="flex items-center gap-1">
-
             {/* Edit button */}
             <PenSquareIcon className="size-4" />
-
             {/* Delete button */}
-            <button className="btn btn-ghost btn-xs text-error" onClick={(e) => handleDelete(e, note._id)}>
+            <button
+              className="btn btn-ghost btn-xs text-error"
+              onClick={(e) => handleDelete(e, note._id)}
+            >
               <Trash2Icon className="size-4" />
             </button>
-
           </div>
         </div>
       </div>
