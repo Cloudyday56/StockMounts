@@ -1,18 +1,24 @@
 import React from "react";
 import { useAuthStore } from "../store/authStore.js";
 import { useState } from "react";
-import { Camera, User, Mail, Trash2 } from "lucide-react";
+import { Camera, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import { formatDate } from "../utils/formatDate";
+import { useNavigate, Navigate, Link } from "react-router-dom";
 
 const ProfilePage = () => {
-  const { user, isUpdatingProfile, updateProfile, deleteAccount, logout } = useAuthStore();
+  const {
+    user,
+    isUpdatingProfile,
+    updateProfile,
+    deleteAccount,
+    isLoading,
+    logout,
+  } = useAuthStore();
   const [selectedImage, setSelectedImage] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const navigate = useNavigate();
 
-  console.log("User data:", user);
+
   //compress image
   const compressImage = (imgSrc, maxWidth = 800, quality = 0.7) => {
     return new Promise((resolve) => {
@@ -66,6 +72,7 @@ const ProfilePage = () => {
     reader.readAsDataURL(file);
 
     reader.onload = async () => {
+      console.log("Image loaded:", reader.result);
       const compressedImage = await compressImage(reader.result);
 
       // Check compressed size (1MB limit)
@@ -85,7 +92,7 @@ const ProfilePage = () => {
   //delete account confirmation
   const handleDeleteAccount = async () => {
     await deleteAccount();
-    navigate("/login");
+    navigate("/");
   };
 
   const handleLogout = () => {
@@ -95,39 +102,90 @@ const ProfilePage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black bg-opacity-80 text-white">
       <div className="w-full max-w-xl bg-[#18181b] rounded-2xl shadow-xl p-8 mt-10">
-        <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-400 to-amber-600 text-transparent bg-clip-text">
-          Dashboard
-        </h2>
-
-        <section className="mb-8">
-          <h3 className="text-xl font-semibold text-yellow-400 mb-3">
-            Profile Information
-          </h3>
-          <div className="space-y-2">
-            <p className="text-gray-300">
-              <span className="font-bold">Name:</span> {user.fullName}
-            </p>
-            <p className="text-gray-300">
-              <span className="font-bold">Email:</span> {user.email}
-            </p>
+        {isLoading && (
+          <div className="min-h-screen bg-base-200 flex items-center justify-center">
+            <LoaderIcon className="w-8 h-8 animate-spin text-gray-500" />
           </div>
-        </section>
-        <section className="mb-8">
-          <h3 className="text-xl font-semibold text-yellow-400 mb-3">
-            Account Activity
-          </h3>
-          <div className="space-y-2">
-            <p className="text-gray-300">
-              <span className="font-bold">Joined:</span>{" "}
-              {new Date(user.createdAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+        )}
+        {/* Header row: Home button left, Profile Information center */}
+        <div className="flex items-center justify-between mb-8 w-full">
+          {/* Home button */}
+          <Link
+            to="/"
+            className="inline-block px-6 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold rounded-lg shadow-lg hover:from-yellow-500 hover:to-amber-600 transition"
+          >
+            Home
+          </Link>
+          {/* Title*/}
+          <h2 className="text-3xl font-bold text-center flex-1 bg-gradient-to-r from-yellow-400 to-amber-600 text-transparent bg-clip-text">
+            Profile Information
+          </h2>
+          {/* Delete Account */}
+          <button
+            onClick={() => setShowDeleteConfirm(true)}
+            className="btn btn-error btn-md flex items-center gap-2 ml-4"
+            title="Delete Account"
+          >
+            <Trash2 className="size-5" />
+          </button>
+        </div>
+
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative">
+            <img
+              src={selectedImage || (user && user.profilePic) || "/avatar.png"}
+              alt="Profile"
+              className="size-32 rounded-full object-cover border-4 "
+            />
+            <label
+              htmlFor="avatar-upload"
+              className={`
+                  absolute bottom-0 right-0 
+                  bg-base-content hover:scale-105
+                  p-2 rounded-full cursor-pointer 
+                  transition-all duration-200
+                  ${
+                    isUpdatingProfile ? "animate-pulse pointer-events-none" : ""
+                  }
+                `}
+            >
+              <Camera className="w-5 h-5 text-base-200" />
+              <input
+                type="file"
+                id="avatar-upload"
+                className="hidden"
+                accept="image/*"
+                onChange={handleImageUpload} //run the function when file is selected
+                disabled={isUpdatingProfile}
+              />
+            </label>
+          </div>
+          <p className="text-sm text-zinc-400">
+            {isUpdatingProfile
+              ? "Uploading..."
+              : "Click the camera icon to update your photo"}
+          </p>
+        </div>
+
+        <section className="mb-8 mt-6 space-y-8">
+          <div className="space-y-4">
+            <p className="text-g text-gray-200">
+              <span className="font-bold text-yellow-500 text-xl">Name:</span>{" "}
+              <span className="text-xl">{user.fullName}</span>
             </p>
-            <p className="text-gray-300">
-              <span className="font-bold">Last Login:</span>{" "}
-              {formatDate(user.lastLogin)}
+            <p className="text-g text-gray-200">
+              <span className="font-bold text-yellow-500 text-xl">Email:</span>{" "}
+              <span className="text-xl">{user.email}</span>
+            </p>
+            <p className="text-g text-gray-200">
+              <span className="font-bold text-yellow-500 text-xl">Joined:</span>{" "}
+              <span className="text-xl">
+                {new Date(user.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
             </p>
           </div>
         </section>
@@ -138,89 +196,6 @@ const ProfilePage = () => {
         >
           Logout
         </button>
-      </div>
-
-      <div className="flex flex-col items-center gap-4">
-        <div className="relative">
-          <img
-            src={selectedImage || (user && user.profilePic) || "/avatar.png"}
-            alt="Profile"
-            className="size-32 rounded-full object-cover border-4 "
-          />
-          <label
-            htmlFor="avatar-upload"
-            className={`
-                  absolute bottom-0 right-0 
-                  bg-base-content hover:scale-105
-                  p-2 rounded-full cursor-pointer 
-                  transition-all duration-200
-                  ${
-                    isUpdatingProfile ? "animate-pulse pointer-events-none" : ""
-                  }
-                `}
-          >
-            <Camera className="w-5 h-5 text-base-200" />
-            <input
-              type="file"
-              id="avatar-upload"
-              className="hidden"
-              accept="image/*"
-              onChange={handleImageUpload} //run the function when file is selected
-              disabled={isUpdatingProfile}
-            />
-          </label>
-        </div>
-        <p className="text-sm text-zinc-400">
-          {isUpdatingProfile
-            ? "Uploading..."
-            : "Click the camera icon to update your photo"}
-        </p>
-      </div>
-
-      <div className="space-y-6">
-        <div className="space-y-1.5">
-          <div className="text-sm text-zinc-400 flex items-center gap-2">
-            <User className="w-4 h-4" />
-            Full Name
-          </div>
-          <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
-            {user?.fullName}
-          </p>
-        </div>
-
-        <div className="space-y-1.5">
-          <div className="text-sm text-zinc-400 flex items-center gap-2">
-            <Mail className="w-4 h-4" />
-            Email Address
-          </div>
-          <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
-            {user?.email}
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-6 bg-base-300 rounded-xl p-6">
-        <h2 className="text-lg font-medium  mb-4">Account Information</h2>
-        <div className="space-y-3 text-sm">
-          <div className="flex items-center justify-between py-2 border-b border-zinc-700">
-            <span>Member Since</span>
-            <span>{user.createdAt?.split("T")[0]}</span>
-          </div>
-          <div className="flex items-center justify-between py-2">
-            <span>Account Status</span>
-            <span className="text-green-500">Active</span>
-          </div>
-        </div>
-
-        <div className="mt-6 flex justify-center">
-          <button
-            onClick={() => setShowDeleteConfirm(true)}
-            className="btn btn-error btn-md flex items-center gap-2"
-          >
-            <Trash2 className="size-5" />
-            <span>Delete Account</span>
-          </button>
-        </div>
       </div>
 
       {showDeleteConfirm && (

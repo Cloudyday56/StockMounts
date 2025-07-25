@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
-export const verifyToken = (req, res, next) => {
+export const verifyToken = async (req, res, next) => {
   // when next() is called, the next function in router will be executed
   //ie. checkAuth in router.get("/check-auth", verifyToken, checkAuth);
 
@@ -14,8 +15,13 @@ export const verifyToken = (req, res, next) => {
     if (!decoded) {
       return res.status(401).json({ success: false, message: "Invalid token" });
     }
-    req.userId = decoded.id; // need to match the key ("id") used in generateTokenAndSetCookie function
-
+    // Fetch user from DB and attach to req.user
+    const user = await User.findById(decoded.id).select("-password");
+    if (!user) {
+      return res.status(401).json({ success: false, message: "User not found" });
+    }
+    req.user = user;
+    req.userId = user._id;
     //proceed if token is valid
     next();
   } catch (error) {

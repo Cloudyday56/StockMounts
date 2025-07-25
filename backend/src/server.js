@@ -43,7 +43,7 @@ app.use(
 // }
 
 app.use(cookieParser()); // Middleware to parse cookies
-app.use(express.json()); //before routes to parse JSON bodies (so that req.body ({title, content}) is available in the routes)
+app.use(express.json({ limit: "1mb" })); //before routes to parse JSON bodies (so that req.body ({title, content}) is available in the routes)
 app.use(rateLimiter); // Middleware to limit the rate of requests
 
 

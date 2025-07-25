@@ -1,6 +1,6 @@
 import React from "react";
 import Input from "../components/Input";
-import { Loader, Lock, Mail, User } from "lucide-react";
+import { LoaderIcon, Lock, Mail, User } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
@@ -30,9 +30,18 @@ const SignUpPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-black bg-opacity-80">
       <div className="w-full max-w-2xl bg-[#18181b] rounded-2xl shadow-xl overflow-hidden">
         <div className="p-8">
-          <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-yellow-400 to-amber-600 text-transparent bg-clip-text">
-            Create Account
-          </h2>
+          <div className="flex items-center justify-between mb-6 w-full">
+            <Link
+              to="/"
+              className="inline-block px-6 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold rounded-lg shadow-lg hover:from-yellow-500 hover:to-amber-600 transition"
+            >
+              Home
+            </Link>
+            <h2 className="text-3xl font-bold text-center flex-1 bg-gradient-to-r from-yellow-400 to-amber-600 text-transparent bg-clip-text">
+              Create Account
+            </h2>
+            <div className="w-24" />
+          </div>
 
           <form onSubmit={handleSignUp}>
             <Input
@@ -56,7 +65,9 @@ const SignUpPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {error && <p className="text-red-500 font-semibold mt-2">{error}</p>}
+            {error && (
+              <p className="text-red-500 font-semibold mt-2">{error}</p>
+            )}
             <PasswordStrengthMeter password={password} />
 
             <button
@@ -65,12 +76,14 @@ const SignUpPage = () => {
               disabled={isLoading}
             >
               {isLoading ? (
-                <Loader className="animate-spin mx-auto" size={24} />
+                <div className="min-h-screen bg-base-200 flex items-center justify-center">
+                  {/* spinning icon */}
+                  <LoaderIcon className="w-8 h-8 animate-spin text-gray-500" />
+                </div>
               ) : (
                 "Sign Up"
               )}
             </button>
-
           </form>
         </div>
 
@@ -83,7 +96,6 @@ const SignUpPage = () => {
             </Link>
           </p>
         </div>
-
       </div>
     </div>
   );
