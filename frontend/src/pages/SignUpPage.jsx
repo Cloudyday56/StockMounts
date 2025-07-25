@@ -76,10 +76,7 @@ const SignUpPage = () => {
               disabled={isLoading}
             >
               {isLoading ? (
-                <div className="min-h-screen bg-base-200 flex items-center justify-center">
-                  {/* spinning icon */}
-                  <LoaderIcon className="w-8 h-8 animate-spin text-gray-500" />
-                </div>
+                "Signing Up..."
               ) : (
                 "Sign Up"
               )}
