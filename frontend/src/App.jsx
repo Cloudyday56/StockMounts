@@ -7,8 +7,8 @@ import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 
-import { Loader } from "lucide-react";
 import { useEffect } from "react";
+import { LoaderIcon } from "lucide-react";
 
 // import toast from 'react-hot-toast';
 import { Routes, Route } from "react-router-dom";
@@ -17,36 +17,47 @@ import { Navigate } from "react-router-dom";
 
 //Protect routes that require authentication
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, isCheckingAuth } = useAuthStore();
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoaderIcon className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
-  } else {
-    return children;
   }
+  return children;
 };
 
 const RedirectAuthenticated = ({ children }) => {
-  const { isAuthenticated } = useAuthStore();
-  if (isAuthenticated) {
-    return <Navigate to="/profile" replace />;
-  } else {
-    return children;
+  const { isAuthenticated, isCheckingAuth } = useAuthStore();
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoaderIcon className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
   }
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+  return children;
 };
 
 const App = () => {
-  const { checkAuth, isCheckingAuth } = useAuthStore();
+  const { checkAuth } = useAuthStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  if (isCheckingAuth) {return <Loader />}
 
   return (
     <div className="relative h-full w-hull">
       {/* the gradient effect at the bottom */}
-      <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#171618_65%,#F3A326_100%)]" />
+      {/* <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#171618_65%,#F3A326_100%)]" /> */}
       <Routes>
         {/* homepage is public */}
         <Route path="/" element={<HomePage />} />

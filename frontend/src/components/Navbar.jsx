@@ -16,11 +16,11 @@ const Navbar = () => {
             StockMounts <TrendingUp size={32} strokeWidth={2.5} />
           </Link>
           <div className="flex items-center gap-4">
-            <Link to="/create" className="btn btn-primary">
-              + New Note
-            </Link>
-            {/* Profile image button - only show if authenticated */}
             {isAuthenticated && (
+              <>
+              <Link to="/create" className="btn btn-primary">
+                + New Note
+              </Link>
               <Link to="/profile" className="flex items-center">
                 <img
                   src={user?.profilePic || "/avatar.png"}
@@ -28,6 +28,7 @@ const Navbar = () => {
                   className="w-12 h-12 rounded-full object-cover border-2 border-primary hover:scale-105 transition-all"
                 />
               </Link>
+              </>
             )}
             {/* Auth buttons */}
             {isAuthenticated ? (

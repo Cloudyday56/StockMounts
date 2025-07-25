@@ -5,13 +5,11 @@ import api from "../lib/axios"; // Import the axios instance
 import { LoaderIcon, Trash2Icon, ArrowLeftIcon } from "lucide-react";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
-import { useAuthStore } from "../store/authStore";
 
 const NoteDetailPage = () => {
   const [note, setNote] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const { user } = useAuthStore();
 
   const navigate = useNavigate(); // Use navigate to redirect after saving or deleting
 
@@ -84,7 +82,7 @@ const NoteDetailPage = () => {
     return (
       <div className="min-h-screen bg-base-200 flex items-center justify-center">
         {/* spinning icon */}
-        <LoaderIcon className="w-8 h-8 animate-spin text-gray-500" />
+        <LoaderIcon className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -113,6 +111,7 @@ const NoteDetailPage = () => {
           {/* note content*/}
           <div className="card bg-base-100">
             <div className="card-body">
+              <h2 className="card-title text-2xl mb-4">Detail</h2>
               {/* title & title name (modifiable) */}
               <div className="form-control mb-4">
                 <label className="label">

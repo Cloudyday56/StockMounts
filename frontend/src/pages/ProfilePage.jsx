@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuthStore } from "../store/authStore.js";
 import { useState } from "react";
-import { Camera, User, Mail, Trash2, Loader } from "lucide-react";
+import { Camera, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useNavigate, Navigate, Link } from "react-router-dom";
 
@@ -11,6 +11,7 @@ const ProfilePage = () => {
     isUpdatingProfile,
     updateProfile,
     deleteAccount,
+    isLoading,
     logout,
   } = useAuthStore();
   const [selectedImage, setSelectedImage] = useState(null);
@@ -100,6 +101,11 @@ const ProfilePage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black bg-opacity-80 text-white">
       <div className="w-full max-w-xl bg-[#18181b] rounded-2xl shadow-xl p-8 mt-10">
+        {isLoading && (
+          <div className="min-h-screen bg-base-200 flex items-center justify-center">
+            <LoaderIcon className="w-8 h-8 animate-spin text-gray-500" />
+          </div>
+        )}
         {/* Header row: Home button left, Profile Information center */}
         <div className="flex items-center justify-between mb-8 w-full">
           {/* Home button */}

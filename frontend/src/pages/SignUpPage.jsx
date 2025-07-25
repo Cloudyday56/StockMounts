@@ -1,6 +1,6 @@
 import React from "react";
 import Input from "../components/Input";
-import { Loader, Lock, Mail, User } from "lucide-react";
+import { LoaderIcon, Lock, Mail, User } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
@@ -76,7 +76,10 @@ const SignUpPage = () => {
               disabled={isLoading}
             >
               {isLoading ? (
-                <Loader className="animate-spin mx-auto" size={24} />
+                <div className="min-h-screen bg-base-200 flex items-center justify-center">
+                  {/* spinning icon */}
+                  <LoaderIcon className="w-8 h-8 animate-spin text-gray-500" />
+                </div>
               ) : (
                 "Sign Up"
               )}

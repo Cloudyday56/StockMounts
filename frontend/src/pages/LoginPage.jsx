@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Lock, Loader } from "lucide-react";
+import { Mail, Lock, LoaderIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import Input from "../components/Input";
 import { useAuthStore } from "../store/authStore";
@@ -67,7 +67,9 @@ const LoginPage = () => {
               disabled={isLoading}
             >
               {isLoading ? (
-                <Loader className="w-6 h-6 animate-spin  mx-auto" />
+                <div className="min-h-screen bg-base-200 flex items-center justify-center">
+                  <LoaderIcon className="w-8 h-8 animate-spin text-gray-500" />
+                </div>
               ) : (
                 "Login"
               )}
