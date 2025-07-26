@@ -151,9 +151,9 @@ class StockPredictor:
           X = X[self.feature_columns]
 
         # Debug information
-        print("\n--- DEBUG: Feature Columns ---")
-        print(f"Model was trained on these features: {self.feature_columns}")
-        print(f"Current data has these features: {X.columns.tolist()}")
+        # print("\n--- DEBUG: Feature Columns ---")
+        # print(f"Model was trained on these features: {self.feature_columns}")
+        # print(f"Current data has these features: {X.columns.tolist()}")
         missing_features = set(self.feature_columns) - set(X.columns.tolist())
         if missing_features:
             print(f"MISSING FEATURES: {missing_features}")

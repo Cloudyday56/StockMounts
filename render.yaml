@@ -18,6 +18,8 @@ services:
     plan: free
     autoDeploy: true
     healthCheckPath: /api/notes
+    buildCommand: ''
+    startCommand: ''
 
   - type: web
     name: mlservice

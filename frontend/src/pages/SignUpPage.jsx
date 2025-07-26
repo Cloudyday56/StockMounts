@@ -72,14 +72,11 @@ const SignUpPage = () => {
 
             <button
               type="submit"
-              className="btn btn-primary w-full mt-4"
-              disabled={isLoading}
+              className="w-full py-3 px-4 bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-bold rounded-lg shadow-lg hover:from-yellow-600 hover:to-amber-700 transition duration-200 disabled:opacity-50"
+              disabled={isLoading || !email || !password || !name}
             >
               {isLoading ? (
-                <div className="min-h-screen bg-base-200 flex items-center justify-center">
-                  {/* spinning icon */}
-                  <LoaderIcon className="w-8 h-8 animate-spin text-gray-500" />
-                </div>
+                "Signing Up..."
               ) : (
                 "Sign Up"
               )}

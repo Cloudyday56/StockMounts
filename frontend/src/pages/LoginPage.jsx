@@ -53,9 +53,9 @@ const LoginPage = () => {
             )}
 
             <button
-              className="w-full py-3 px-4 bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-bold rounded-lg shadow-lg hover:from-yellow-600 hover:to-amber-700 transition duration-200"
+              className="w-full py-3 px-4 bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-bold rounded-lg shadow-lg hover:from-yellow-600 hover:to-amber-700 transition duration-200 disabled:opacity-50"
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !email || !password}
             >
               {isLoading ? (
                 "Logging in..."

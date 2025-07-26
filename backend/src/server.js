@@ -52,6 +52,9 @@ app.use("/api/predict", predictionRoutes); // Middleware for prediction routes
 app.use("/api/auth", authRoutes); // Middleware for authentication routes
 // app.use("/api/whatever", whateverRoutes);
 
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ ok: true });
+});
 
 
 connectDB().then(() => {
