@@ -8,7 +8,11 @@ services:
       - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL}
       - UPSTASH_REDIS_REST_TOKEN=${UPSTASH_REDIS_REST_TOKEN}
       - PORT=5001
-    # Comment out the following 4 lines to run the backend in production mode
+      - JWT_SECRET=${JWT_SECRET}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      # Comment out the following 4 lines to run the backend in production mode
     #   - NODE_ENV=development
     # command: npm run dev
     # volumes:
@@ -25,11 +29,11 @@ services:
   frontend:
     build:
       context: ./frontend
-      # dockerfile: Dockerfile.dev # Uncomment for production
+      # dockerfile: Dockerfile.dev # Comment out for production
     ports:
       - "80:80" # Production port
       # - "5173:5173" # Development port
-    # Uncomment the following 6 lines to run the frontend in production mode
+      # Comment out the following 6 lines to run the frontend in production mode
     # environment:
     #   - NODE_ENV=development
     # volumes:
