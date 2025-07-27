@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar/";
-import RateLimitedUI from "../components/RateLimitedUI";
+// import RateLimitedUI from "../components/RateLimitedUI";
 import NoteCard from "../components/NoteCard";
 import NotesNotFound from "../components/NotesNotFound";
 import StockPredictor from "../components/StockPredictor";
@@ -8,13 +8,12 @@ import Footer from "../components/Footer";
 import SignInToView from "../components/SignInToView";
 
 import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
 
 import api from "../lib/axios"; // Import the axios instance
 import { useAuthStore } from "../store/authStore";
 
 const HomePage = () => {
-  const [isRateLimited, setIsRateLimited] = useState(false);
+  // const [isRateLimited, setIsRateLimited] = useState(false);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user, isAuthenticated } = useAuthStore();
@@ -34,15 +33,10 @@ const HomePage = () => {
           (note) => note.owner === user._id
         );
         setNotes(userNotes);
-        setIsRateLimited(false);
+        // setIsRateLimited(false);
       } catch (error) {
         console.log("Error fetching notes:", error);
         console.log("Error response:", error.response);
-        if (error.response?.status === 429) {
-          setIsRateLimited(true);
-        } else {
-          toast.error("Error loading notes");
-        }
       } finally {
         setLoading(false);
       }
@@ -55,7 +49,7 @@ const HomePage = () => {
       <Navbar />
 
       <div className="flex-grow">
-        {isRateLimited && <RateLimitedUI />}
+        {/* {isRateLimited && <RateLimitedUI />} */}
 
         {/* Unified container for alignment */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
