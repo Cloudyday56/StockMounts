@@ -14,11 +14,17 @@ export const signup = async (req, res) => {
     if (!fullName || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    //invalide password
-    if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ message: "Password must be at least 6 characters long" });
+
+    // Password strength validation (must match frontend PasswordStrengthMeter)
+    const passwordRequirements = [
+      password.length >= 6,
+      /[A-Z]/.test(password),
+      /[a-z]/.test(password),
+      /\d/.test(password),
+      /[^A-Za-z0-9]/.test(password),
+    ];
+    if (passwordRequirements.includes(false)) {
+      return res.status(400).json({ message: "Password too weak" });
     }
 
     //check if user already exists
@@ -252,7 +258,6 @@ export const gitCallback = async (req, res) => {
         : "http://localhost:5173"; // remove the port if deployed in local production
 
     res.redirect(FRONTEND_URL);
-
   } catch (error) {
     console.error("GitHub OAuth error:", error.message);
     res.status(500).json({ message: "GitHub authentication failed" });
