@@ -2,6 +2,7 @@ import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js
 import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
 import cloudinary from "../config/cloudinary.js"; //import cloudinary for image upload
+import axios from "axios";
 
 //signup controller
 export const signup = async (req, res) => {
@@ -68,7 +69,9 @@ export const login = async (req, res) => {
   try {
     //input validation (also checked in frontend)
     if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
     }
     //check if user exists
     const user = await User.findOne({ email });
@@ -145,6 +148,7 @@ export const checkAuth = async (req, res) => {
   }
 };
 
+//delete account controller
 export const deleteAccount = async (req, res) => {
   try {
     const userId = req.user._id; //user added from the protectRoute middleware
@@ -159,5 +163,90 @@ export const deleteAccount = async (req, res) => {
   } catch (error) {
     console.log("Error during account deletion:", error.message);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const CALLBACK_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://backend-6z9h.onrender.com/api/auth/github/callback" // Production URL
+    : "http://localhost:5001/api/auth/github/callback";
+
+// GitHub OAuth login controller
+export const gitLogin = (req, res) => {
+  const clientId = process.env.GITHUB_CLIENT_ID;
+  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+    CALLBACK_URL
+  )}&scope=user:email`;
+  res.redirect(githubAuthUrl); // send the user to GitHub for authentication
+};
+
+// Redirect to GitHub for authentication
+export const gitCallback = async (req, res) => {
+  const code = req.query.code; //get the code from url (send by Github)
+  if (!code) {
+    return res.status(400).json({ message: "No code provided" });
+  }
+  try {
+    // 1. Exchange code for access token
+    const tokenResponse = await axios.post(
+      "https://github.com/login/oauth/access_token",
+      {
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET,
+        code,
+        redirect_uri: CALLBACK_URL,
+      },
+      {
+        headers: { Accept: "application/json" },
+      }
+    );
+    const accessToken = tokenResponse.data.access_token;
+    if (!accessToken) {
+      return res
+        .status(400)
+        .json({ message: "No access token received from GitHub" });
+    }
+
+    // 2. Fetch user info from GitHub
+    const userResponse = await axios.get("https://api.github.com/user", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const emailResponse = await axios.get("https://api.github.com/user/emails", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const githubUser = userResponse.data;
+    const emails = emailResponse.data;
+
+    //identify primary & verified email
+    const primaryEmailObj =
+      emails.find((e) => e.primary && e.verified) || emails[0];
+    const email = primaryEmailObj ? primaryEmailObj.email : null;
+    if (!email) {
+      return res
+        .status(400)
+        .json({ message: "No email found in GitHub profile" });
+    }
+
+    // 3. Find or create user
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = new User({
+        email,
+        fullName: githubUser.name || githubUser.login || "GitHub User",
+        password: "", // No password for OAuth users
+        profilePic: githubUser.avatar_url || "",
+      });
+      await user.save();
+    }
+
+    // 4. JWT and cookie
+    generateTokenAndSetCookie(res, user._id);
+
+    // 5. Redirect to frontend HomePage
+    res.redirect("/");
+
+  } catch (error) {
+    console.error("GitHub OAuth error:", error.message);
+    res.status(500).json({ message: "GitHub authentication failed" });
   }
 };
