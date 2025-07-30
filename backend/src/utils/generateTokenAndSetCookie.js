@@ -10,7 +10,7 @@ export const generateTokenAndSetCookie = (res, userId) => {
   res.cookie("token", token, {
     httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-    sameSite: "Strict", // prevents CSRF attacks
+    sameSite: "none", // prevents CSRF attacks
     maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie expires in 7 days
   });
 
