@@ -17,7 +17,7 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    "http://localhost:5001", # Default Vite dev port for frontend
+    "http://localhost:5001",
     "http://localhost:5000",
     "https://stockmounts.onrender.com",
     "https://backend-6z9h.onrender.com",
