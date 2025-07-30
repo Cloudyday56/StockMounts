@@ -10,6 +10,11 @@ const LoginPage = () => {
 
   const { login, isLoading, error } = useAuthStore();
 
+  // Use production backend URL if in production, otherwise use empty string for Vite proxy
+  const backendUrl = import.meta.env.MODE === "production"
+    ? "https://backend-6z9h.onrender.com"
+    : "";
+
   const handleLogin = async (e) => {
     e.preventDefault();
     await login(email.toLowerCase(), password);
@@ -53,18 +58,29 @@ const LoginPage = () => {
             )}
 
             <button
-              className="w-full py-3 px-4 bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-bold rounded-lg shadow-lg hover:from-yellow-600 hover:to-amber-700 transition duration-200 disabled:opacity-50"
+              className="w-full py-3 px-4 bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-bold rounded-lg shadow-lg hover:from-yellow-600 hover:to-amber-700 transition duration-200  text-lg disabled:opacity-50"
               type="submit"
               disabled={isLoading || !email || !password}
             >
-              {isLoading ? (
-                "Logging in..."
-              ) : (
-                "Login"
-              )}
+              {isLoading ? "Logging in..." : "Login"}
             </button>
           </form>
+
+          <div className="flex flex-col items-center w-full">
+            <p className="text-sm text-gray-400 text-center my-2 w-full">OR</p>
+            <button
+              className="w-1/2 max-w-md py-3 px-4 bg-gradient-to-r from-gray-300 to-gray-700 text-black font-bold rounded-lg shadow-lg hover:from-gray-500 hover:to-gray-800 transition duration-200 text-lg"
+              type="button"
+              onClick={() =>
+                (window.location.href = `${backendUrl}/api/auth/github`)
+              }
+            >
+              Login with GitHub
+            </button>
+          </div>
+
         </div>
+
         <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">
           <p className="text-sm text-gray-400">
             Don't have an account?{" "}

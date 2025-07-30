@@ -3,7 +3,7 @@ import { useAuthStore } from "../store/authStore.js";
 import { useState } from "react";
 import { Camera, Trash2, LoaderIcon } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { useNavigate, Navigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const ProfilePage = () => {
   const {

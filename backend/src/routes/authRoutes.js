@@ -1,5 +1,5 @@
 import express from 'express';
-import { signup, login, logout, updateProfile, checkAuth, deleteAccount } from '../controllers/authController.js'; // Import the auth controller functions
+import { signup, login, logout, updateProfile, checkAuth, deleteAccount, gitLogin, gitCallback } from '../controllers/authController.js'; // Import the auth controller functions
 import { verifyToken } from '../middleware/verifyToken.js';
 
 const router = express.Router();
@@ -12,5 +12,9 @@ router.post("/logout", logout);
 
 router.put("/update-profile", verifyToken, updateProfile);
 router.delete("/delete-account", verifyToken, deleteAccount);
+
+// Github OAuth routes
+router.get("/github", gitLogin);
+router.get("/github/callback", gitCallback);
 
 export default router;
