@@ -34,6 +34,8 @@ app.use(
     })
 ); // Enable CORS for all routes (Cross-Origin Resource Sharing)
 
+app.set("trust proxy", 1);
+
 //deploy under PRODUCTION (for monorepo, not for multi service deployment)
 // if (process.env.NODE_ENV === "production") {
 //     app.use(express.static(path.join(__dirname, "../frontend/dist"))); // Serve static files from the "dist" directory in frontend

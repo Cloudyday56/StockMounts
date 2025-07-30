@@ -5,6 +5,7 @@ const BASE_URL = import.meta.env.MODE === "development" ? "/api" : "https://back
 
 const api = axios.create({
   baseURL: "/api",
+  withCredentials: true,
 });
 
 export default api;
