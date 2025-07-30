@@ -211,9 +211,12 @@ export const gitCallback = async (req, res) => {
     const userResponse = await axios.get("https://api.github.com/user", {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    const emailResponse = await axios.get("https://api.github.com/user/emails", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    const emailResponse = await axios.get(
+      "https://api.github.com/user/emails",
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
     const githubUser = userResponse.data;
     const emails = emailResponse.data;
 
@@ -228,12 +231,12 @@ export const gitCallback = async (req, res) => {
     }
 
     // 3. Find or create user
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email }); //find
     if (!user) {
+      //create
       user = new User({
         email,
         fullName: githubUser.name || githubUser.login || "GitHub User",
-        password: "", // No password for OAuth users
         profilePic: githubUser.avatar_url || "",
       });
       await user.save();
@@ -243,7 +246,12 @@ export const gitCallback = async (req, res) => {
     generateTokenAndSetCookie(res, user._id);
 
     // 5. Redirect to frontend HomePage
-    res.redirect("/");
+    const FRONTEND_URL =
+      process.env.NODE_ENV === "production"
+        ? "https://stockmounts.onrender.com"
+        : "http://localhost:5173"; // remove the port if deployed in local production
+
+    res.redirect(FRONTEND_URL);
 
   } catch (error) {
     console.error("GitHub OAuth error:", error.message);
