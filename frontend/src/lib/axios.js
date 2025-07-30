@@ -4,7 +4,7 @@ const BASE_URL = import.meta.env.MODE === "development" ? "/api" : "https://back
 // Change "/api" to "http://localhost:5001/api" for non-docker development
 
 const api = axios.create({
-  baseURL: BASE_URL, // use "/api" for local Docker production
+  baseURL: "/api",
 });
 
 export default api;
