@@ -12,6 +12,10 @@ const SignUpPage = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate(); //redirect user after signup
 
+  const backendUrl = import.meta.env.MODE === "production"
+    ? "https://backend-6z9h.onrender.com"
+    : "";
+
   const { signup, error, isLoading } = useAuthStore();
 
   const handleSignUp = async (e) => {
@@ -68,11 +72,13 @@ const SignUpPage = () => {
             {error && (
               <p className="text-red-500 font-semibold mt-2">{error}</p>
             )}
-            <PasswordStrengthMeter password={password} />
+            <div className="mb-4">
+              <PasswordStrengthMeter password={password} />
+            </div>
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-bold rounded-lg shadow-lg hover:from-yellow-600 hover:to-amber-700 transition duration-200 disabled:opacity-50"
+              className="w-full py-3 px-4 bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-bold rounded-lg shadow-lg hover:from-yellow-600 hover:to-amber-700 transition duration-200 text-lg disabled:opacity-50"
               disabled={isLoading || !email || !password || !name}
             >
               {isLoading ? (
@@ -82,6 +88,20 @@ const SignUpPage = () => {
               )}
             </button>
           </form>
+
+          <div className="flex flex-col items-center w-full">
+            <p className="text-sm text-gray-400 text-center my-2 w-full">OR</p>
+            <button
+              className="w-1/2 max-w-md py-3 px-4 bg-gradient-to-r from-gray-300 to-gray-700 text-black font-bold rounded-lg shadow-lg hover:from-gray-500 hover:to-gray-800 transition duration-200 text-lg"
+              type="button"
+              onClick={() =>
+                (window.location.href = `${backendUrl}/api/auth/github`)
+              }
+            >
+              Sign Up with GitHub
+            </button>
+          </div>
+
         </div>
 
         {/* Footer */}
