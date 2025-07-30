@@ -13,4 +13,8 @@ router.post("/logout", logout);
 router.put("/update-profile", verifyToken, updateProfile);
 router.delete("/delete-account", verifyToken, deleteAccount);
 
+// Github OAuth routes
+router.get("/github", gitlogin);
+router.get("/github/callback", gitcallback);
+
 export default router;
