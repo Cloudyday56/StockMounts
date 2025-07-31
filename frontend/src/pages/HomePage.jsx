@@ -27,7 +27,13 @@ const HomePage = () => {
     setLoading(true);
     const fetchNotes = async () => {
       try {
-        const response = await api.get("/notes"); //Backend API endpoint
+        // look if there is token in local storage
+        const storedToken = localStorage.getItem("token");
+        const config = storedToken
+          ? { headers: { Authorization: `Bearer ${storedToken}` } }
+          : {}; // fallback to cookie
+
+        const response = await api.get("/notes", config); //Backend API endpoint
         // Only show notes belonging to the authenticated user (owner)
         const userNotes = response.data.filter(
           (note) => note.owner === user._id

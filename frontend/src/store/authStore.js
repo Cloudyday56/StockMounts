@@ -107,6 +107,7 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true, error: null }); //start loading while logging out
     try {
       await axios.post(`${API_URL}/logout`);
+      localStorage.removeItem("token"); //clear token from local storage
       toast.success("Logged out successfully");
       set({
         user: null,
@@ -143,6 +144,7 @@ export const useAuthStore = create((set) => ({
   deleteAccount: async () => {
     try {
       await axios.delete(`${API_URL}/delete-account`); //send request to backend endpoint
+      localStorage.removeItem("token"); // clear token from local storage
       set({ user: null, isAuthenticated: false, error: null }); // Reset auth user state
       toast.success("Account deleted successfully");
     } catch (error) {
