@@ -124,7 +124,12 @@ export const useAuthStore = create((set) => ({
   updateProfile: async (data) => {
     set({ isUpdatingProfile: true }); //set loading state
     try {
-      const response = await axios.put(`${API_URL}/update-profile`, data); //send the profile update request
+      // look if there is token in local storage
+      const storedToken = localStorage.getItem("token");
+      const config = storedToken
+        ? { headers: { Authorization: `Bearer ${storedToken}` } }
+        : {};
+      const response = await axios.put(`${API_URL}/update-profile`, data, config); //send the profile update request
       set({
         user: response.data.user,
         isAuthenticated: true,
@@ -143,7 +148,12 @@ export const useAuthStore = create((set) => ({
   // delete user account
   deleteAccount: async () => {
     try {
-      await axios.delete(`${API_URL}/delete-account`); //send request to backend endpoint
+      // look if there is token in local storage
+      const storedToken = localStorage.getItem("token");
+      const config = storedToken
+        ? { headers: { Authorization: `Bearer ${storedToken}` } }
+        : {};
+      await axios.delete(`${API_URL}/delete-account`, config); //send request to backend endpoint
       localStorage.removeItem("token"); // clear token from local storage
       set({ user: null, isAuthenticated: false, error: null }); // Reset auth user state
       toast.success("Account deleted successfully");
