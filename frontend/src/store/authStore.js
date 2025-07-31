@@ -43,8 +43,34 @@ export const useAuthStore = create((set) => ({
   //to fetch user data, implement a checkAuth function
   checkAuth: async () => {
     set({ isCheckingAuth: true, error: null }); //start checking auth
+
+    // 1. Check for token in URL
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    if (token) { //token found in URL
+      localStorage.setItem("token", token);
+      // Remove token from URL
+      params.delete("token");
+      const newUrl =
+        window.location.pathname +
+        (params.toString() ? "?" + params.toString() : "");
+      window.history.replaceState({}, "", newUrl);
+    }
+
+    // 2. Either send the token in Authorization header or use cookie-based auth
+    const storedToken = localStorage.getItem("token");
     try {
-      const response = await axios.get(`${API_URL}/check-auth`);
+      let response;
+      if (storedToken) {
+        // Use token in Authorization header
+        response = await axios.get(`${API_URL}/check-auth`, {
+          headers: { Authorization: `Bearer ${storedToken}` },
+        });
+      } else {
+        // Fallback to cookie-based auth (regular login method)
+        response = await axios.get(`${API_URL}/check-auth`);
+      }
+      //return the authenticated user data
       set({
         user: response.data.user,
         isAuthenticated: true,

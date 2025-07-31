@@ -5,7 +5,12 @@ export const verifyToken = async (req, res, next) => {
   // when next() is called, the next function in router will be executed
   //ie. checkAuth in router.get("/check-auth", verifyToken, checkAuth);
 
-  const token = req.cookies.token // should match the name of the cookie set in generateTokenAndSetCookie function
+  // get the token from the request cookies or headers (2 ways because of regular Login and OAuth)
+  let token = req.cookies.token; // should match the name of the cookie set in generateTokenAndSetCookie function
+  if (!token && req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+
   if (!token) {
     return res.status(401).json({ success: false, message: "No token provided" });
   }
