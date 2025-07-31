@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
 import cloudinary from "../config/cloudinary.js"; //import cloudinary for image upload
 import axios from "axios";
+import jwt from "jsonwebtoken";
 
 //signup controller
 export const signup = async (req, res) => {
@@ -248,8 +249,10 @@ export const gitCallback = async (req, res) => {
       await user.save();
     }
 
-    // 4. JWT and cookie
-    generateTokenAndSetCookie(res, user._id);
+    // 4. Generate JWT (not HTTP-only), without setting cookie
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d", // 7 days expiration
+    });
 
     // 5. Redirect to frontend HomePage
     const FRONTEND_URL =
@@ -257,7 +260,7 @@ export const gitCallback = async (req, res) => {
         ? "https://stockmounts.onrender.com"
         : "http://localhost:5173"; // remove the port if deployed in local production
 
-    res.redirect(FRONTEND_URL);
+    res.redirect(`${FRONTEND_URL}?token=${token}`);
   } catch (error) {
     console.error("GitHub OAuth error:", error.message);
     res.status(500).json({ message: "GitHub authentication failed" });
