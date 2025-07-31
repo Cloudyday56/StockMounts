@@ -11,9 +11,10 @@ const LoginPage = () => {
   const { login, isLoading, error } = useAuthStore();
 
   // Use production backend URL if in production, otherwise use empty string for Vite proxy
-  const backendUrl = import.meta.env.MODE === "production"
-    ? "https://backend-6z9h.onrender.com"
-    : "";
+  const backendUrl =
+    import.meta.env.MODE === "production"
+      ? "https://backend-6z9h.onrender.com"
+      : "";
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -69,16 +70,22 @@ const LoginPage = () => {
           <div className="flex flex-col items-center w-full">
             <p className="text-sm text-gray-400 text-center my-2 w-full">OR</p>
             <button
-              className="w-1/2 max-w-md py-3 px-4 bg-gradient-to-r from-gray-300 to-gray-700 text-black font-bold rounded-lg shadow-lg hover:from-gray-500 hover:to-gray-800 transition duration-200 text-lg"
+              className="w-1/2 max-w-md py-3 px-4 bg-gradient-to-r from-gray-300 to-gray-700 text-black font-bold rounded-lg shadow-lg hover:from-gray-500 hover:to-gray-800 transition duration-200 text-lg flex items-center justify-center gap-3"
               type="button"
               onClick={() =>
                 (window.location.href = `${backendUrl}/api/auth/github`)
               }
             >
-              Login with GitHub
+              <span className="flex items-center">
+                Login with
+                <img
+                  src="/github-mark.svg"
+                  alt="GitHub"
+                  className="w-7 h-7 ml-2 align-middle fill-black"
+                />
+              </span>
             </button>
           </div>
-
         </div>
 
         <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">

@@ -12,6 +12,7 @@ export const generateTokenAndSetCookie = (res, userId) => {
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
     sameSite: "none", // prevents CSRF attacks
     maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie expires in 7 days
+    domain: process.env.NODE_ENV === "production" ? ".onrender.com" : undefined,
   });
 
   return token;
