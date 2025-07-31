@@ -22,12 +22,14 @@ const CreatePage = () => {
     }
 
     setLoading(true);
+    // look if there is token in local storage
+    const storedToken = localStorage.getItem("token");
+    const config = storedToken
+      ? { headers: { Authorization: `Bearer ${storedToken}` } }
+      : {};
+
     try {
-      await api.post("/notes", {
-        title,
-        content,
-        indicator,
-      });
+      await api.post("/notes", { title, content, indicator }, config);
       toast.success("Note created successfully");
       navigate("/"); //send back to home after creation
     } catch (error) {

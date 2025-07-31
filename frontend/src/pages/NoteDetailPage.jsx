@@ -14,16 +14,17 @@ const NoteDetailPage = () => {
   const navigate = useNavigate(); // Use navigate to redirect after saving or deleting
 
   const { id } = useParams();
-  // console.log({id});
 
   // Fetch the note details using the id from the URL
   useEffect(() => {
+    // look if there is token in local storage
+    const storedToken = localStorage.getItem("token");
+    const config = storedToken
+      ? { headers: { Authorization: `Bearer ${storedToken}` } }
+      : {}; // fallback to cookie
     const fetchNote = async () => {
       try {
-        const response = await api.get(`/notes/${id}`);
-        // if (!response.ok) {
-        //   throw new Error('Network response was not ok');
-        // }
+        const response = await api.get(`/notes/${id}`, config);
         setNote(response.data);
       } catch (error) {
         console.error("Error fetching note:", error);
@@ -43,9 +44,13 @@ const NoteDetailPage = () => {
     if (!window.confirm("Are you sure you want to delete this note?")) {
       return;
     }
-
+    // look if there is token in local storage
+    const storedToken = localStorage.getItem("token");
+    const config = storedToken
+      ? { headers: { Authorization: `Bearer ${storedToken}` } }
+      : {}; // fallback to cookie
     try {
-      await api.delete(`/notes/${id}`);
+      await api.delete(`/notes/${id}`, config);
       toast.success("Note deleted successfully");
       navigate("/"); // Redirect to home page after deletion
     } catch (error) {
@@ -63,10 +68,14 @@ const NoteDetailPage = () => {
 
     setSaving(true); //save
 
+    // look if there is token in local storage
+    const storedToken = localStorage.getItem("token");
+    const config = storedToken
+      ? { headers: { Authorization: `Bearer ${storedToken}` } }
+      : {}; // fallback to cookie
+
     try {
-      await api.put(`/notes/${id}`, {
-        ...note,
-      });
+      await api.put(`/notes/${id}`, {...note}, config);
       toast.success("Note updated successfully");
       navigate("/"); // Redirect to home page after update
     } catch (error) {
