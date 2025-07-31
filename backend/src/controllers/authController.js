@@ -164,7 +164,7 @@ export const deleteAccount = async (req, res) => {
 
     await User.findByIdAndDelete(userId); //del user
     // Clear auth cookie
-    res.cookie("jwt", "", { maxAge: 0 });
+    res.cookie("token", "", { maxAge: 0 });
     res.status(200).json({ message: "Account deleted successfully" });
   } catch (error) {
     console.log("Error during account deletion:", error.message);

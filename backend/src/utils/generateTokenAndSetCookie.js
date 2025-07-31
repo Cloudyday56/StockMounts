@@ -10,9 +10,8 @@ export const generateTokenAndSetCookie = (res, userId) => {
   res.cookie("token", token, {
     httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-    sameSite: "none", // prevents CSRF attacks
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie expires in 7 days
-    domain: process.env.NODE_ENV === "production" ? ".onrender.com" : undefined,
   });
 
   return token;
