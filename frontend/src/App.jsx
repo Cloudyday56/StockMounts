@@ -51,6 +51,12 @@ const App = () => {
 
   useEffect(() => {
     checkAuth();
+
+    // Wake up backend and ML service on first load (production only)
+    if (import.meta.env.PROD) {
+      fetch("https://backend-6z9h.onrender.com/api/health").catch(() => {});
+      fetch("https://mlservice-i6if.onrender.com/ping").catch(() => {});
+    }
   }, [checkAuth]);
 
   return (
