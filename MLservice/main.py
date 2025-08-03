@@ -63,11 +63,17 @@ def convert_numpy_types(obj):
     else:
         return obj
 
+
+# Health check/ping endpoint for Render wake-up
+@app.get("/ping")
+def ping():
+    return {"ok": True}
+
 @app.get("/")
 def read_root():
     return {"message": "ML Service is running"}
 
-
+# Get stock prediction
 @app.get("/predict/{ticker}")
 def get_prediction(ticker: str, period: str = "1y"):
     
