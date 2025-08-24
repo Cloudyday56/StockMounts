@@ -9,6 +9,7 @@ A Dockerized full-stack MERN + Python Machine Learning app for taking trading no
 
 - Stock price prediction using ML models (Python service)
 - Create, view, update, and delete notes with title and content
+- User Authentication system: Email & Github OAuth
 - Rate limiting to prevent spam (Upstash Redis)
 - Modern UI with Tailwind CSS and DaisyUI
 - Toast notifications for user feedback
