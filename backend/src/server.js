@@ -10,7 +10,6 @@ import predictionRoutes from "./routes/predictionRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 
 import { connectDB } from "./config/db.js";
-import rateLimiter from "./middleware/rateLimiter.js";
 
 
 dotenv.config(); // Load environment variables from .env file
@@ -46,7 +45,6 @@ app.set("trust proxy", 1);
 
 app.use(cookieParser()); // Middleware to parse cookies
 app.use(express.json({ limit: "1mb" })); //before routes to parse JSON bodies (so that req.body ({title, content}) is available in the routes)
-app.use(rateLimiter); // Middleware to limit the rate of requests
 
 
 app.use("/api/notes", notesRoutes); // Middleware to parse JSON bodies
