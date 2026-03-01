@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import api from "../lib/axios";
 import StockChart from "./StockChart";
 import { toast } from "react-hot-toast";
-import RateLimitedUI from "./RateLimitedUI";
+// import RateLimitedUI from "./RateLimitedUI";
 
 const StockPredictor = () => {
   const [ticker, setTicker] = useState("SPY");
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isRateLimited, setIsRateLimited] = useState(false);
+  // const [isRateLimited, setIsRateLimited] = useState(false);
   const [isGridVisible, setIsGridVisible] = useState(false); // State for grid visibility
 
   const fetchPrediction = async (tickerSymbol) => {
@@ -23,11 +23,7 @@ const StockPredictor = () => {
       const response = await api.get(`/predict/${tickerSymbol.toUpperCase()}`);
       setPrediction(response.data);
     } catch (err) {
-      if (err.response?.status === 429) {
-        setIsRateLimited(true);
-      } else {
-        toast.error("Error fetching prediction. Please try again.");
-      }
+      toast.error("Error fetching prediction. Please try again.");
       console.error("Error fetching prediction:", err);
     } finally {
       setLoading(false);
@@ -64,12 +60,10 @@ const StockPredictor = () => {
 
       {/* Show a loading skeleton or the prediction */}
       {loading && !prediction && (
-        <div className="mt-6 text-center">
-          Loading data...
-        </div>
+        <div className="mt-6 text-center">Loading data...</div>
       )}
 
-      {isRateLimited && <RateLimitedUI />}
+      {/* {isRateLimited && <RateLimitedUI />} */}
 
       {prediction && (
         <div className="mt-8">
